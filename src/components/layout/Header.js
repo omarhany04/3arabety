@@ -1,0 +1,123 @@
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Activity, Menu, Search, ShoppingCart } from 'react-feather';
+
+const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location]);
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center py-4 px-6 md:px-8">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center">
+              <span className="text-blue-600"><Activity className="h-8 w-8" /></span>
+              <span className="ml-2 text-2xl font-bold text-gray-800">Auto<span className="text-blue-600">Expert</span></span>
+            </Link>
+          </div>
+          
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+              className="text-gray-600 hover:text-gray-900 focus:outline-none"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+          
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex space-x-8">
+            <NavLink 
+              to="/" 
+              className={`nav-link ${isActive('/') ? 'active text-gray-800' : 'text-gray-600'} hover:text-blue-600 font-medium`}
+            >
+              Home
+            </NavLink>
+            <NavLink 
+              to="/services/mechanical-repairs" 
+              className={`nav-link ${location.pathname.includes('/services') ? 'active text-gray-800' : 'text-gray-600'} hover:text-blue-600 font-medium`}
+            >
+              Services
+            </NavLink>
+            <NavLink 
+              to="/shop" 
+              className={`nav-link ${isActive('/shop') ? 'active text-gray-800' : 'text-gray-600'} hover:text-blue-600 font-medium`}
+            >
+              Shop
+            </NavLink>
+            <NavLink 
+              to="/locations" 
+              className={`nav-link ${isActive('/locations') ? 'active text-gray-800' : 'text-gray-600'} hover:text-blue-600 font-medium`}
+            >
+              Locations
+            </NavLink>
+            <NavLink 
+              to="/contact" 
+              className={`nav-link ${isActive('/contact') ? 'active text-gray-800' : 'text-gray-600'} hover:text-blue-600 font-medium`}
+            >
+              Contact
+            </NavLink>
+          </nav>
+          
+          {/* Action Buttons */}
+          <div className="hidden md:flex items-center space-x-4">
+            <button className="text-gray-600 hover:text-blue-600">
+              <Search className="h-5 w-5" />
+            </button>
+            <Link to="/shop" className="text-gray-600 hover:text-blue-600 relative">
+              <ShoppingCart className="h-5 w-5" />
+              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+            </Link>
+            <Link to="/contact" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium transition duration-300">
+              24/7 Help
+            </Link>
+          </div>
+        </div>
+        
+        {/* Mobile Navigation */}
+        <div className={`md:hidden ${mobileMenuOpen ? 'block' : 'hidden'} bg-white py-4 px-6 space-y-4 shadow-inner`}>
+          <NavLink to="/" className="block text-gray-800 hover:text-blue-600 font-medium">Home</NavLink>
+          <div className="block text-gray-600 hover:text-blue-600 font-medium">
+            <div className="font-medium mb-2">Services</div>
+            <div className="pl-4 space-y-2">
+              <NavLink to="/services/mechanical-repairs" className="block text-gray-600 hover:text-blue-600">Mechanical Repairs</NavLink>
+              <NavLink to="/services/emergency-assistance" className="block text-gray-600 hover:text-blue-600">Emergency Assistance</NavLink>
+              <NavLink to="/services/inspection-services" className="block text-gray-600 hover:text-blue-600">Inspection Services</NavLink>
+              <NavLink to="/services/spare-parts-supply" className="block text-gray-600 hover:text-blue-600">Spare Parts Supply</NavLink>
+              <NavLink to="/services/towing-service" className="block text-gray-600 hover:text-blue-600">Towing Service</NavLink>
+              <NavLink to="/services/car-wash-care" className="block text-gray-600 hover:text-blue-600">Car Wash & Care</NavLink>
+            </div>
+          </div>
+          <NavLink to="/shop" className="block text-gray-600 hover:text-blue-600 font-medium">Shop</NavLink>
+          <NavLink to="/locations" className="block text-gray-600 hover:text-blue-600 font-medium">Locations</NavLink>
+          <NavLink to="/contact" className="block text-gray-600 hover:text-blue-600 font-medium">Contact</NavLink>
+          <div className="pt-4 flex items-center justify-between border-t border-gray-200">
+            <button className="text-gray-600 hover:text-blue-600">
+              <Search className="h-5 w-5" />
+            </button>
+            <Link to="/shop" className="text-gray-600 hover:text-blue-600 relative">
+              <ShoppingCart className="h-5 w-5" />
+              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+            </Link>
+            <Link to="/contact" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium transition duration-300">
+              24/7 Help
+            </Link>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
