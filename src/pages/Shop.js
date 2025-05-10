@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+// src/pages/Shop.js - Updated version with brand filtering and cart integration
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ShoppingCart, Filter, Grid, List, ChevronDown, ChevronUp, Search } from 'react-feather';
+import BrandFilter from '../components/common/shop/BrandFilter';
+import { useCart } from '../context/CartContext';
 
 const Shop = () => {
+  // Cart functionality
+  const { addItem } = useCart();
+
   // State for filters and products
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [brandFilter, setBrandFilter] = useState([]);
   const [sortBy, setSortBy] = useState('popular');
   const [viewMode, setViewMode] = useState('grid');
   const [priceRange, setPriceRange] = useState([0, 300]);
@@ -22,6 +30,26 @@ const Shop = () => {
     { id: 'interior', name: 'Interior & Accessories', count: 72 }
   ];
 
+  // Sample brands
+  const brands = [
+    { id: 'toyota', name: 'Toyota', count: 87 },
+    { id: 'honda', name: 'Honda', count: 65 },
+    { id: 'bmw', name: 'BMW', count: 43 },
+    { id: 'mercedes', name: 'Mercedes', count: 56 },
+    { id: 'ford', name: 'Ford', count: 48 },
+    { id: 'chevrolet', name: 'Chevrolet', count: 39 },
+    { id: 'audi', name: 'Audi', count: 34 },
+    { id: 'nissan', name: 'Nissan', count: 42 },
+    { id: 'hyundai', name: 'Hyundai', count: 38 },
+    { id: 'kia', name: 'Kia', count: 32 },
+    { id: 'volkswagen', name: 'Volkswagen', count: 36 },
+    { id: 'peugeot', name: 'Peugeot', count: 29 },
+    { id: 'suzuki', name: 'Suzuki', count: 25 },
+    { id: 'renault', name: 'Renault', count: 27 },
+    { id: 'opel', name: 'Opel', count: 19 },
+    { id: 'mitsubishi', name: 'Mitsubishi', count: 18 },
+  ];
+
   // Sample products
   const allProducts = [
     {
@@ -29,6 +57,7 @@ const Shop = () => {
       name: 'Premium Oil Filter',
       category: 'filters',
       description: 'Fits multiple vehicle makes',
+      brand: ['toyota', 'honda', 'nissan'],
       price: 12.99,
       rating: 4.5,
       reviews: 42,
@@ -40,6 +69,7 @@ const Shop = () => {
       name: 'Ceramic Brake Pads',
       category: 'brakes',
       description: 'Front set for Toyota/Honda',
+      brand: ['toyota', 'honda'],
       price: 49.99,
       rating: 5,
       reviews: 67,
@@ -51,6 +81,7 @@ const Shop = () => {
       name: 'Performance Air Filter',
       category: 'filters',
       description: 'Reusable, high-flow design',
+      brand: ['bmw', 'audi', 'mercedes'],
       price: 39.99,
       rating: 4,
       reviews: 29,
@@ -62,6 +93,7 @@ const Shop = () => {
       name: 'Platinum Spark Plugs',
       category: 'electrical',
       description: 'Set of 4, extended life',
+      brand: ['ford', 'chevrolet', 'toyota'],
       price: 29.99,
       rating: 4.5,
       reviews: 53,
@@ -73,6 +105,7 @@ const Shop = () => {
       name: 'Synthetic Engine Oil',
       category: 'oils',
       description: '5W-30, 5 liter container',
+      brand: ['bmw', 'audi', 'mercedes', 'volkswagen'],
       price: 34.99,
       rating: 4.8,
       reviews: 122,
@@ -85,6 +118,7 @@ const Shop = () => {
       name: 'Car Battery',
       category: 'electrical',
       description: '12V 60Ah, high performance',
+      brand: ['toyota', 'honda', 'nissan', 'hyundai', 'kia'],
       price: 129.99,
       rating: 4.7,
       reviews: 89,
@@ -96,6 +130,7 @@ const Shop = () => {
       name: 'Brake Rotors',
       category: 'brakes',
       description: 'Front pair, cross-drilled',
+      brand: ['bmw', 'mercedes', 'audi'],
       price: 89.99,
       rating: 4.6,
       reviews: 43,
@@ -107,6 +142,7 @@ const Shop = () => {
       name: 'Radiator Coolant',
       category: 'cooling',
       description: 'All-season protection, 1 gallon',
+      brand: ['ford', 'chevrolet', 'toyota', 'honda'],
       price: 19.99,
       rating: 4.3,
       reviews: 37,
@@ -116,10 +152,37 @@ const Shop = () => {
     }
   ];
 
-  // Filter products based on category and search
+  // State for installation service
+  const [installationServices, setInstallationServices] = useState({});
+
+  const toggleInstallation = (productId) => {
+    setInstallationServices(prevState => ({
+      ...prevState,
+      [productId]: !prevState[productId]
+    }));
+  };
+
+  // Handle adding to cart
+  const handleAddToCart = (product) => {
+    addItem(product, 1, installationServices[product.id] || false);
+  };
+
+  // Toggle brand filter
+  const toggleBrand = (brandId) => {
+    setBrandFilter(prevBrands => 
+      prevBrands.includes(brandId)
+        ? prevBrands.filter(b => b !== brandId)
+        : [...prevBrands, brandId]
+    );
+  };
+
+  // Filter products based on category, brand, price, and search
   const filteredProducts = allProducts.filter(product => {
     // Apply category filter
     if (categoryFilter !== 'all' && product.category !== categoryFilter) return false;
+    
+    // Apply brand filter
+    if (brandFilter.length > 0 && !brandFilter.some(brand => product.brand.includes(brand))) return false;
     
     // Apply price range filter
     if (product.price < priceRange[0] || product.price > priceRange[1]) return false;
@@ -149,6 +212,14 @@ const Shop = () => {
     const newRange = [...priceRange];
     newRange[index] = Number(e.target.value);
     setPriceRange(newRange);
+  };
+
+  // Reset all filters
+  const resetFilters = () => {
+    setCategoryFilter('all');
+    setBrandFilter([]);
+    setPriceRange([0, 300]);
+    setSearchQuery('');
   };
 
   return (
@@ -205,6 +276,13 @@ const Shop = () => {
                 ))}
               </ul>
 
+              {/* Brand Filter Component */}
+              <BrandFilter 
+                selectedBrands={brandFilter} 
+                toggleBrand={toggleBrand} 
+                allBrands={brands} 
+              />
+
               <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Price Range</h3>
               <div className="px-2 mb-6">
                 <div className="flex justify-between mb-2">
@@ -255,8 +333,11 @@ const Shop = () => {
                 </div>
               </div>
 
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition duration-300 flex justify-center items-center">
-                <Filter className="h-4 w-4 mr-2" /> Apply Filters
+              <button 
+                onClick={resetFilters}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition duration-300 flex justify-center items-center"
+              >
+                <Filter className="h-4 w-4 mr-2" /> Reset Filters
               </button>
             </div>
           </div>
@@ -290,6 +371,21 @@ const Shop = () => {
                         onClick={() => setCategoryFilter(cat.id)}
                       >
                         {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Brands</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {brands.slice(0, 8).map(brand => (
+                      <button
+                        key={brand.id}
+                        className={`py-2 px-3 text-sm rounded ${brandFilter.includes(brand.id) ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
+                        onClick={() => toggleBrand(brand.id)}
+                      >
+                        {brand.name}
                       </button>
                     ))}
                   </div>
@@ -353,12 +449,20 @@ const Shop = () => {
                   </div>
                 </div>
 
-                <button 
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition duration-300"
-                  onClick={() => setShowFilters(false)}
-                >
-                  Apply Filters
-                </button>
+                <div className="flex space-x-2">
+                  <button 
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition duration-300"
+                    onClick={() => setShowFilters(false)}
+                  >
+                    Apply Filters
+                  </button>
+                  <button 
+                    className="flex-1 border border-blue-600 text-blue-600 hover:bg-blue-50 py-2 rounded-md font-medium transition duration-300"
+                    onClick={resetFilters}
+                  >
+                    Reset
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -407,11 +511,7 @@ const Shop = () => {
                 <p className="mt-1 text-gray-500">Try adjusting your search or filter criteria.</p>
                 <button 
                   className="mt-4 text-blue-600 hover:text-blue-800 font-medium"
-                  onClick={() => {
-                    setCategoryFilter('all');
-                    setPriceRange([0, 300]);
-                    setSearchQuery('');
-                  }}
+                  onClick={resetFilters}
                 >
                   Reset all filters
                 </button>
@@ -432,6 +532,18 @@ const Shop = () => {
                         )}
                       </div>
                       <div className="p-4">
+                        <div className="text-xs text-gray-500 mb-1">
+                          {product.brand.slice(0, 3).map((brandId, index) => {
+                            const brandName = brands.find(b => b.id === brandId)?.name;
+                            return (
+                              <span key={brandId}>
+                                {brandName}
+                                {index < Math.min(product.brand.length, 3) - 1 && ", "}
+                              </span>
+                            );
+                          })}
+                          {product.brand.length > 3 && ` +${product.brand.length - 3} more`}
+                        </div>
                         <h4 className="text-lg font-bold text-gray-900 mb-1">{product.name}</h4>
                         <p className="text-gray-600 text-sm mb-2">{product.description}</p>
                         <div className="flex items-center mb-3">
@@ -439,15 +551,14 @@ const Shop = () => {
                             {[...Array(5)].map((_, i) => (
                               <svg 
                                 key={i} 
-                                className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`} 
-                                fill="currentColor" 
-                                viewBox="0 0 20 20"
+                                className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-current' : ''}`} 
+                                viewBox="0 0 24 24" stroke="currentColor"
                               >
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                               </svg>
                             ))}
-                            <span className="text-gray-500 text-sm ml-2">({product.reviews})</span>
                           </div>
+                          <span className="text-gray-500 text-sm ml-2">({product.reviews})</span>
                         </div>
                         <div className="flex items-center justify-between">
                           <div>
@@ -456,13 +567,22 @@ const Shop = () => {
                             )}
                             <span className="text-lg font-bold text-gray-900">${product.price}</span>
                           </div>
-                          <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md transition duration-300">
+                          <button 
+                            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md transition duration-300"
+                            onClick={() => handleAddToCart(product)}
+                            aria-label="Add to cart"
+                          >
                             <ShoppingCart className="h-5 w-5" />
                           </button>
                         </div>
                         <div className="mt-3">
                           <label className="flex items-center text-sm text-gray-600">
-                            <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600" />
+                            <input 
+                              type="checkbox" 
+                              className="form-checkbox h-4 w-4 text-blue-600"
+                              checked={installationServices[product.id] || false}
+                              onChange={() => toggleInstallation(product.id)}
+                            />
                             <span className="ml-2">Add installation service</span>
                           </label>
                         </div>
@@ -486,17 +606,27 @@ const Shop = () => {
                           )}
                         </div>
                         <div className="md:w-2/3 p-6">
+                          <div className="text-xs text-gray-500 mb-1">
+                            {product.brand.map((brandId, index) => {
+                              const brandName = brands.find(b => b.id === brandId)?.name;
+                              return (
+                                <span key={brandId}>
+                                  {brandName}
+                                  {index < product.brand.length - 1 && ", "}
+                                </span>
+                              );
+                            })}
+                          </div>
                           <div className="flex justify-between">
                             <h4 className="text-xl font-bold text-gray-900 mb-1">{product.name}</h4>
                             <div className="flex text-yellow-400">
                               {[...Array(5)].map((_, i) => (
                                 <svg 
                                   key={i} 
-                                  className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`} 
-                                  fill="currentColor" 
-                                  viewBox="0 0 20 20"
+                                  className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-current' : ''}`} 
+                                  viewBox="0 0 24 24" stroke="currentColor"
                                 >
-                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                                 </svg>
                               ))}
                               <span className="text-gray-500 text-sm ml-2">({product.reviews})</span>
@@ -512,10 +642,18 @@ const Shop = () => {
                             </div>
                             <div className="flex items-center space-x-4">
                               <label className="flex items-center text-sm text-gray-600">
-                                <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600 mr-2" />
+                                <input 
+                                  type="checkbox" 
+                                  className="form-checkbox h-4 w-4 text-blue-600 mr-2"
+                                  checked={installationServices[product.id] || false}
+                                  onChange={() => toggleInstallation(product.id)}
+                                />
                                 Add installation
                               </label>
-                              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition duration-300 flex items-center">
+                              <button 
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition duration-300 flex items-center"
+                                onClick={() => handleAddToCart(product)}
+                              >
                                 <ShoppingCart className="h-5 w-5 mr-2" /> Add to Cart
                               </button>
                             </div>

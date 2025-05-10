@@ -1,6 +1,8 @@
+// src/components/layout/Header.js - Updated version with CartButton
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Activity, Menu, Search, ShoppingCart } from 'react-feather';
+import { Activity, Menu, Search } from 'react-feather';
+import CartButton from '../common/shop/CartButton';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -75,10 +77,7 @@ const Header = () => {
             <button className="text-gray-600 hover:text-blue-600">
               <Search className="h-5 w-5" />
             </button>
-            <Link to="/shop" className="text-gray-600 hover:text-blue-600 relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
-            </Link>
+            <CartButton />
           </div>
         </div>
         
@@ -103,10 +102,7 @@ const Header = () => {
             <button className="text-gray-600 hover:text-blue-600">
               <Search className="h-5 w-5" />
             </button>
-            <Link to="/shop" className="text-gray-600 hover:text-blue-600 relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
-            </Link>
+            <CartButton />
           </div>
         </div>
       </div>
