@@ -1,13 +1,48 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Activity, Facebook, Twitter, Instagram, Youtube, 
-  MapPin, Phone, Mail, Clock 
+  MapPin, Phone, Mail, Clock, Headphones, MessageCircle
 } from 'react-feather';
 
 const Footer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Function to handle testimonials link click
+  const handleTestimonialsClick = (e) => {
+    e.preventDefault();
+    
+    if (location.pathname === '/') {
+      // If already on home page, scroll to testimonials section
+      const testimonialsSection = document.getElementById('testimonials');
+      if (testimonialsSection) {
+        testimonialsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // If not on home page, navigate to home and then scroll to testimonials
+      navigate('/', { state: { scrollToTestimonials: true } });
+    }
+  };
+
+  // Function to handle services link click
+  const handleServicesClick = (e) => {
+    e.preventDefault();
+    
+    if (location.pathname === '/') {
+      // If already on home page, scroll to services section
+      const servicesSection = document.getElementById('services');
+      if (servicesSection) {
+        servicesSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // If not on home page, navigate to home and then scroll to services
+      navigate('/', { state: { scrollToServices: true } });
+    }
+  };
+
   return (
-    <footer className="bg-gray-800 text-white py-16">
+    <footer className="bg-gray-800 text-white py-12 md:py-10">
       <div className="container mx-auto px-6 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-12 gap-y-8">
 
@@ -26,21 +61,28 @@ const Footer = () => {
               </p>
 
               <div className="flex space-x-4 mb-6">
-                <a href="#" className="text-gray-400 hover:text-blue-400 transition duration-300">
+                <a href="https://www.facebook.com/" className="text-gray-400 hover:text-blue-400 transition duration-300" target="_blank" rel="noopener noreferrer">
                   <Facebook className="h-5 w-5" />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-blue-400 transition duration-300">
+                <a href="https://x.com/" className="text-gray-400 hover:text-blue-400 transition duration-300" target="_blank" rel="noopener noreferrer">
                   <Twitter className="h-5 w-5" />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-blue-400 transition duration-300">
+                <a href="https://www.instagram.com/" className="text-gray-400 hover:text-blue-400 transition duration-300" target="_blank" rel="noopener noreferrer">
                   <Instagram className="h-5 w-5" />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-blue-400 transition duration-300">
+                <a href="https://www.youtube.com/" className="text-gray-400 hover:text-blue-400 transition duration-300" target="_blank" rel="noopener noreferrer">
                   <Youtube className="h-5 w-5" />
                 </a>
               </div>
-
-              <p className="text-gray-500 text-sm">
+              {/* Message Center Button with enhanced hover effects */}
+              <Link 
+                to="/contact" 
+                className="inline-flex items-center bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-md font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:text-white hover:font-bold transform origin-center"
+              >
+                <MessageCircle className="h-4 w-4 mr-2" /> 
+                Message Center
+              </Link>
+              <p className="text-gray-500 text-sm mt-6">
                 &copy; {new Date().getFullYear()} 3arabety. All rights reserved.
               </p>
             </div>
@@ -54,10 +96,25 @@ const Footer = () => {
                 <Link to="/" className="text-gray-400 hover:text-blue-400 transition duration-300">Home</Link>
               </li>
               <li>
-                <Link to="/services/mechanical-repairs" className="text-gray-400 hover:text-blue-400 transition duration-300">Services</Link>
+                <a 
+                  href="/#services" 
+                  onClick={handleServicesClick}
+                  className="text-gray-400 hover:text-blue-400 transition duration-300"
+                >
+                  Services
+                </a>
               </li>
               <li>
                 <Link to="/shop" className="text-gray-400 hover:text-blue-400 transition duration-300">Shop</Link>
+              </li>
+              <li>
+                <a 
+                  href="/#testimonials" 
+                  onClick={handleTestimonialsClick}
+                  className="text-gray-400 hover:text-blue-400 transition duration-300"
+                >
+                  Testimonials
+                </a>
               </li>
               <li>
                 <Link to="/locations" className="text-gray-400 hover:text-blue-400 transition duration-300">Locations</Link>
@@ -96,10 +153,10 @@ const Footer = () => {
           {/* Column 4: Contact Info */}
           <div>
             <h3 className="text-lg font-bold mb-6">Contact Us</h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3 mb-6">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-blue-400 mr-3 mt-1" />
-                <span className="text-gray-400">21 El Nasr Road<br />Smouha, Alexandria, Egypt</span>
+                <span className="text-gray-400">21 El Nasr Road<br />Smouha, Alexandria</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 text-blue-400 mr-3" />
@@ -113,6 +170,10 @@ const Footer = () => {
                 <Clock className="h-5 w-5 text-blue-400 mr-3" />
                 <span className="text-gray-400">24 Service</span>
               </li>
+              <li className="flex items-center">
+              <Headphones className="h-5 w-5 text-blue-400 mr-3" />
+              <span className="text-gray-400">Live customer support</span>
+            </li>
             </ul>
           </div>
         </div>

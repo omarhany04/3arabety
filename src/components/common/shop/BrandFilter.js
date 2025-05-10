@@ -1,4 +1,3 @@
-// src/components/common/shop/BrandFilter.js
 import React from 'react';
 import { ChevronDown, ChevronUp, Check } from 'react-feather';
 

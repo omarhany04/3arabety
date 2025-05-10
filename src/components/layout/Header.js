@@ -1,4 +1,3 @@
-// src/components/layout/Header.js - Updated version with scroll to services functionality
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, Search } from 'react-feather';
@@ -36,13 +35,36 @@ const Header = () => {
     }
   };
 
+  // Function to handle testimonials link click
+  const handleTestimonialsClick = (e) => {
+    e.preventDefault();
+    
+    if (location.pathname === '/') {
+      // If already on home page, scroll to testimonials section
+      const testimonialsSection = document.getElementById('testimonials');
+      if (testimonialsSection) {
+        testimonialsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // If not on home page, navigate to home and then scroll to testimonials
+      navigate('/', { state: { scrollToTestimonials: true } });
+    }
+  };
+
   // Effect to handle scrolling when navigating to home with state
   useEffect(() => {
-    if (location.pathname === '/' && location.state?.scrollToServices) {
+    if (location.pathname === '/') {
       setTimeout(() => {
-        const servicesSection = document.getElementById('services');
-        if (servicesSection) {
-          servicesSection.scrollIntoView({ behavior: 'smooth' });
+        if (location.state?.scrollToServices) {
+          const servicesSection = document.getElementById('services');
+          if (servicesSection) {
+            servicesSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else if (location.state?.scrollToTestimonials) {
+          const testimonialsSection = document.getElementById('testimonials');
+          if (testimonialsSection) {
+            testimonialsSection.scrollIntoView({ behavior: 'smooth' });
+          }
         }
       }, 100); // Small delay to ensure DOM is ready
     }
@@ -90,6 +112,13 @@ const Header = () => {
             >
               Shop
             </NavLink>
+            <a 
+              href="/#testimonials"
+              onClick={handleTestimonialsClick}
+              className={`nav-link cursor-pointer text-gray-600 hover:text-blue-600 font-medium`}
+            >
+              Testimonials
+            </a>
             <NavLink 
               to="/locations" 
               className={`nav-link ${isActive('/locations') ? 'active text-gray-800' : 'text-gray-600'} hover:text-blue-600 font-medium`}
@@ -132,6 +161,13 @@ const Header = () => {
             </div>
           </div>
           <NavLink to="/shop" className="block text-gray-600 hover:text-blue-600 font-medium">Shop</NavLink>
+          <a 
+            href="/#testimonials"
+            onClick={handleTestimonialsClick}
+            className="block text-gray-600 hover:text-blue-600 font-medium"
+          >
+            Testimonials
+          </a>
           <NavLink to="/locations" className="block text-gray-600 hover:text-blue-600 font-medium">Locations</NavLink>
           <NavLink to="/contact" className="block text-gray-600 hover:text-blue-600 font-medium">Contact</NavLink>
           <div className="pt-4 flex items-center justify-between border-t border-gray-200">
