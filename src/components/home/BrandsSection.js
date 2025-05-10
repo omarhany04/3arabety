@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const BrandsSection = () => {
+  const [showAll, setShowAll] = useState(false);
+
   const brands = [
     { name: "Toyota", logo: "https://www.carlogos.org/car-logos/toyota-logo-2020-europe-download.png" },
     { name: "Honda", logo: "https://www.carlogos.org/car-logos/honda-logo-2000-full-download.png" },
@@ -23,6 +25,8 @@ const BrandsSection = () => {
     { name: "Subaru", logo: "https://www.carlogos.org/car-logos/subaru-logo-2019-download.png" },
   ];
 
+  const visibleBrands = showAll ? brands : brands.slice(0, 12);
+
   return (
     <section id="brands" className="py-16 bg-white">
       <div className="container mx-auto px-6 md:px-8">
@@ -32,20 +36,25 @@ const BrandsSection = () => {
             We provide services and parts for all major car brands and models.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {brands.map((brand, index) => (
+          {visibleBrands.map((brand, index) => (
             <div key={index} className="brand-logo bg-white rounded-lg shadow-sm p-6 flex items-center justify-center">
               <img src={brand.logo} alt={brand.name} className="max-h-12 object-contain" />
             </div>
           ))}
         </div>
-        
-        <div className="text-center mt-12">
-          <Link to="/services/mechanical-repairs" className="inline-block bg-white border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-md font-medium transition duration-300">
-            View All Brands
-          </Link>
-        </div>
+
+        {!showAll && (
+          <div className="text-center mt-12">
+            <button
+              onClick={() => setShowAll(true)}
+              className="inline-block bg-white border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-md font-medium transition duration-300"
+            >
+              View All Brands
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

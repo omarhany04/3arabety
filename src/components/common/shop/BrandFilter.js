@@ -1,4 +1,4 @@
-// src/components/shop/BrandFilter.js
+// src/components/common/shop/BrandFilter.js
 import React from 'react';
 import { ChevronDown, ChevronUp, Check } from 'react-feather';
 
@@ -6,7 +6,7 @@ const BrandFilter = ({ selectedBrands, toggleBrand, allBrands }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   // Show only 6 brands initially, expand to show all
-  const visibleBrands = isExpanded ? allBrands : allBrands.slice(0, 6);
+  const visibleBrands = isExpanded ? allBrands : allBrands.slice(0, 8);
 
   return (
     <div className="mb-6">

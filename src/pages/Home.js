@@ -6,7 +6,6 @@ import WhyChooseUs from '../components/home/WhyChooseUs';
 import ShopSection from '../components/home/ShopSection';
 import BrandsSection from '../components/home/BrandsSection';
 import Testimonials from '../components/home/Testimonials';
-import CallToAction from '../components/home/CallToAction';
 import { Link } from 'react-router-dom';
 
 // Simple CTA component that directs users to the Locations page
@@ -58,7 +57,6 @@ const Home = () => {
       <BrandsSection />
       <LocationsCTA />
       <Testimonials />
-      <CallToAction />
       <ContactCTA />
     </div>
   );

@@ -194,12 +194,6 @@ const EmergencyAssistance = () => {
               </div>
             </div>
           </div>
-          
-          <div className="text-center mt-12">
-            <Link to="/contact" className="inline-block bg-white border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-8 py-3 rounded-md font-medium transition duration-300">
-              View Full Price List
-            </Link>
-          </div>
         </div>
         
         {/* Membership Plans */}

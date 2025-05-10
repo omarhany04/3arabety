@@ -1,8 +1,9 @@
 // src/components/layout/Header.js - Updated version with CartButton
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Activity, Menu, Search } from 'react-feather';
+import { Menu, Search } from 'react-feather';
 import CartButton from '../common/shop/CartButton';
+import { FaCarSide } from 'react-icons/fa';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,7 +24,7 @@ const Header = () => {
         <div className="flex justify-between items-center py-4 px-6 md:px-8">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="text-blue-600"><Activity className="h-8 w-8" /></span>
+              <span className="text-blue-600"><FaCarSide className="h-8 w-8" /></span>
               <span className="ml-2 text-2xl font-bold text-gray-800">3arabety</span>
             </Link>
           </div>

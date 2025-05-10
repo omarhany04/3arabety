@@ -70,12 +70,6 @@ const ServicesOverview = () => {
             <ServiceCard key={service.id} service={service} />
           ))}
         </div>
-        
-        <div className="text-center mt-12">
-          <Link to="/services/mechanical-repairs" className="inline-block bg-white border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-md font-medium transition duration-300">
-            View All Services
-          </Link>
-        </div>
       </div>
     </section>
   );

@@ -15,7 +15,7 @@ const InspectionServices = () => {
         
         <div className="flex flex-col lg:flex-row items-center mb-16">
           <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <img src="/images/placeholder/600/400" alt="Inspection Services" className="rounded-lg shadow-lg" />
+            <img src="https://i.ibb.co/tPzRTLk9/Car-Inspection.jpg" alt="Inspection Services" className="rounded-lg shadow-lg" />
           </div>
           
           <div className="lg:w-1/2 lg:pl-16">
@@ -95,7 +95,7 @@ const InspectionServices = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
               <div className="relative">
-                <img src="/images/placeholder/400/250" alt="Pre-Purchase Inspection" className="w-full h-48 object-cover" />
+                <img src="https://i.ibb.co/207J03vf/pre-purchase-inspection.jpg" alt="Pre-Purchase Inspection" className="w-full h-48 object-cover" />
                 <div className="absolute top-0 left-0 bg-green-600 text-white text-sm px-3 py-1">
                   Most Popular
                 </div>
@@ -134,7 +134,7 @@ const InspectionServices = () => {
             
             <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
               <div className="relative">
-                <img src="/images/placeholder/400/250" alt="Pre-Sale Inspection" className="w-full h-48 object-cover" />
+                <img src="https://i.ibb.co/wFc8wx2K/pre-inspection.jpg" alt="Pre-Sale Inspection" className="w-full h-48 object-cover" />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Pre-Sale Inspection</h3>
@@ -170,7 +170,7 @@ const InspectionServices = () => {
             
             <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
               <div className="relative">
-                <img src="/images/placeholder/400/250" alt="Safety Inspection" className="w-full h-48 object-cover" />
+                <img src="https://i.ibb.co/yTWdqLy/Safety-Inspection.webp" alt="Safety Inspection" className="w-full h-48 object-cover" />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Safety Inspection</h3>
@@ -283,7 +283,7 @@ const InspectionServices = () => {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">James Wilson</h4>
+                  <h4 className="font-bold text-gray-900">Ahmed Hossam</h4>
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, i) => (
                       <svg key={i} className="h-4 w-4 fill-current" viewBox="0 0 24 24">
@@ -306,7 +306,7 @@ const InspectionServices = () => {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">Maria Gonzalez</h4>
+                  <h4 className="font-bold text-gray-900">Sama Khaled</h4>
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, i) => (
                       <svg key={i} className="h-4 w-4 fill-current" viewBox="0 0 24 24">

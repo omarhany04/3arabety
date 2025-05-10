@@ -1,6 +1,4 @@
-// src/pages/Shop.js - Enhanced version with additional product categories and items
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { ShoppingCart, Filter, Grid, List, ChevronDown, ChevronUp, Search } from 'react-feather';
 import BrandFilter from '../components/common/shop/BrandFilter';
 import { useCart } from '../context/CartContext';
@@ -18,51 +16,9 @@ const Shop = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 9;
+  const productsPerPage = viewMode === 'list' ? 3 : 9;
 
 
-  // Sample categories (Updated to match the image categories)
-  const categories = [
-    { id: 'spare', name: 'Spare Parts', count: 124 },
-    { id: 'fluids', name: 'Fluids', count: 85 },
-    { id: 'batteries', name: 'Batteries', count: 63 },
-    { id: 'lighting', name: 'Car Lighting', count: 41 },
-    { id: 'carcare', name: 'Car Care', count: 38 },
-    { id: 'accessories', name: 'Accessories', count: 54 },
-    { id: 'engine', name: 'Engine Performance', count: 72 },
-    { id: 'brakes', name: 'Brakes & Suspension', count: 67 },
-    { id: 'electrical', name: 'Electrical', count: 53 },
-    { id: 'filters', name: 'Filters', count: 48 },
-    { id: 'cooling', name: 'Cooling System', count: 39 },
-    { id: 'body', name: 'Body & Exterior', count: 45 },
-    { id: 'interior', name: 'Interior', count: 62 }
-  ];
-
-  // Sample brands
-  const brands = [
-    { id: 'toyota', name: 'Toyota', count: 87 },
-    { id: 'honda', name: 'Honda', count: 65 },
-    { id: 'bmw', name: 'BMW', count: 43 },
-    { id: 'mercedes', name: 'Mercedes', count: 56 },
-    { id: 'ford', name: 'Ford', count: 48 },
-    { id: 'chevrolet', name: 'Chevrolet', count: 39 },
-    { id: 'audi', name: 'Audi', count: 34 },
-    { id: 'nissan', name: 'Nissan', count: 42 },
-    { id: 'hyundai', name: 'Hyundai', count: 38 },
-    { id: 'kia', name: 'Kia', count: 32 },
-    { id: 'volkswagen', name: 'Volkswagen', count: 36 },
-    { id: 'peugeot', name: 'Peugeot', count: 29 },
-    { id: 'suzuki', name: 'Suzuki', count: 25 },
-    { id: 'renault', name: 'Renault', count: 27 },
-    { id: 'opel', name: 'Opel', count: 19 },
-    { id: 'mitsubishi', name: 'Mitsubishi', count: 18 },
-    { id: 'bosch', name: 'Bosch', count: 64 },
-    { id: 'castrol', name: 'Castrol', count: 37 },
-    { id: 'mobil', name: 'Mobil', count: 31 },
-    { id: 'shell', name: 'Shell', count: 29 }
-  ];
-
-  // Sample products (Enhanced with more items based on image categories)
   const allProducts = [
     // Spare Parts
     {
@@ -71,7 +27,7 @@ const Shop = () => {
       category: 'spare',
       description: 'High performance brake rotor',
       brand: ['toyota', 'honda', 'nissan'],
-      price: 45.99,
+      price: 464.99,
       rating: 4.7,
       reviews: 58,
       image: 'https://i.ibb.co/YB2yPnCf/Break-Disc.png',
@@ -83,7 +39,7 @@ const Shop = () => {
       category: 'spare',
       description: 'Premium quality drive belt',
       brand: ['ford', 'chevrolet', 'toyota'],
-      price: 29.99,
+      price: 229.99,
       rating: 4.5,
       reviews: 42,
       image: 'https://i.ibb.co/4nFpmYYK/Serpentine.jpg',
@@ -96,7 +52,7 @@ const Shop = () => {
       name: 'Synthetic Engine Oil',
       category: 'fluids',
       description: '5W-30, 5 liter container',
-      brand: ['castrol', 'mobil', 'shell'],
+      brand: ['fiat ', 'renault', 'opel'],
       price: 1199.99,
       rating: 4.8,
       reviews: 122,
@@ -109,7 +65,7 @@ const Shop = () => {
       name: 'Antifreeze & Coolant',
       category: 'fluids',
       description: 'All-season protection, 1 gallon',
-      brand: ['shell', 'mobil'],
+      brand: ['mitsubishi', 'renault'],
       price: 619.99,
       rating: 4.3,
       reviews: 37,
@@ -124,7 +80,7 @@ const Shop = () => {
       name: 'Car Battery',
       category: 'batteries',
       description: '12V 60Ah, high performance',
-      brand: ['bosch', 'toyota', 'honda', 'nissan', 'hyundai', 'kia'],
+      brand: ['subaru ', 'toyota', 'honda', 'nissan', 'hyundai', 'kia'],
       price: 2499.99,
       rating: 4.7,
       reviews: 89,
@@ -136,7 +92,7 @@ const Shop = () => {
       name: 'Heavy Duty Truck Battery',
       category: 'batteries',
       description: '12V 100Ah, for commercial vehicles',
-      brand: ['bosch', 'ford', 'chevrolet'],
+      brand: ['subaru ', 'ford', 'chevrolet'],
       price: 4349.99,
       rating: 4.6,
       reviews: 48,
@@ -150,8 +106,8 @@ const Shop = () => {
       name: 'LED Headlight Pair',
       category: 'lighting',
       description: 'High/low beam, fits most models',
-      brand: ['bosch', 'toyota', 'honda', 'bmw'],
-      price: 149.99,
+      brand: ['subaru ', 'toyota', 'honda', 'bmw'],
+      price: 489.99,
       rating: 4.9,
       reviews: 76,
       image: 'https://i.ibb.co/JjDtwb4R/Led.jpgs',
@@ -163,7 +119,7 @@ const Shop = () => {
       category: 'lighting',
       description: 'Universal fit with mounting hardware',
       brand: ['bmw', 'mercedes', 'volkswagen'],
-      price: 65.99,
+      price: 774.99,
       rating: 4.4,
       reviews: 53,
       image: 'https://i.ibb.co/mVCZSwhk/Fog-Lights.jpg',
@@ -176,8 +132,8 @@ const Shop = () => {
       name: 'Car Cleaning Kit',
       category: 'carcare',
       description: 'Complete kit with shampoo, wax and microfiber cloths',
-      brand: ['sonax'],
-      price: 49.99,
+      brand: ['volkswagen'],
+      price:679.99,
       rating: 4.8,
       reviews: 112,
       image: 'https://i.ibb.co/S4YBKYQ1/Cleaning-Kit.jpg',
@@ -188,8 +144,8 @@ const Shop = () => {
       name: 'Wheel Cleaner Spray',
       category: 'carcare',
       description: 'Professional grade, acid-free formula',
-      brand: ['sonax'],
-      price: 14.99,
+      brand: ['peugeot'],
+      price: 224.99,
       rating: 4.6,
       reviews: 87,
       image: 'https://i.ibb.co/35jf49BF/Wheel-Clean.webp',
@@ -203,7 +159,7 @@ const Shop = () => {
       category: 'accessories',
       description: 'Set of 4, custom fit for most vehicles',
       brand: ['toyota', 'honda', 'ford'],
-      price: 69.99,
+      price: 899.99,
       rating: 4.7,
       reviews: 156,
       image: 'https://i.ibb.co/kbL6XrG/Floor-Mats.png',
@@ -215,12 +171,12 @@ const Shop = () => {
       category: 'accessories',
       description: 'Universal fit, dashboard or vent mounting',
       brand: [],
-      price: 19.99,
+      price: 299.99,
       rating: 4.5,
       reviews: 203,
       image: 'https://i.ibb.co/GGyLbqR/Phone-Holder.jpg',
       badge: { text: 'Sale', color: 'red' },
-      oldPrice: 24.99
+      oldPrice: 349.99
     },
     
     // Engine Performance
@@ -230,7 +186,7 @@ const Shop = () => {
       category: 'engine',
       description: 'Washable and reusable performance filter',
       brand: ['bmw', 'audi', 'mercedes'],
-      price: 49.99,
+      price: 599.99,
       rating: 4.6,
       reviews: 78,
       image: 'https://i.ibb.co/k2xw4r2B/High-Flow-Air-Filter.jpg',
@@ -241,8 +197,8 @@ const Shop = () => {
       name: 'Fuel Injector Cleaner',
       category: 'engine',
       description: 'Professional strength formula, 16oz bottle',
-      brand: ['castrol', 'mobil', 'shell'],
-      price: 12.99,
+      brand: ['fiat ', 'renault', 'suzuki'],
+      price: 649.99,
       rating: 4.4,
       reviews: 91,
       image: 'https://i.ibb.co/qMgZ1nBt/Injector.jpg',
@@ -256,7 +212,7 @@ const Shop = () => {
       category: 'filters',
       description: 'Fits multiple vehicle makes',
       brand: ['toyota', 'honda', 'nissan'],
-      price: 12.99,
+      price: 1299.99,
       rating: 4.5,
       reviews: 42,
       image: 'https://i.ibb.co/cdfvy7k/oil-filter.jpg',
@@ -268,7 +224,7 @@ const Shop = () => {
       category: 'brakes',
       description: 'Front set for Toyota/Honda',
       brand: ['toyota', 'honda'],
-      price: 49.99,
+      price:999.99,
       rating: 5,
       reviews: 67,
       image: 'https://i.ibb.co/Z6PCx1D9/Ceramic-Brakes.jpg',
@@ -280,7 +236,7 @@ const Shop = () => {
       category: 'electrical',
       description: 'Set of 4, extended life',
       brand: ['ford', 'chevrolet', 'toyota'],
-      price: 29.99,
+      price: 449.99,
       rating: 4.5,
       reviews: 53,
       image: 'https://i.ibb.co/cdfvy7k/spark-plugs.jpg',
@@ -292,13 +248,267 @@ const Shop = () => {
       category: 'brakes',
       description: 'Front pair, cross-drilled',
       brand: ['bmw', 'mercedes', 'audi'],
-      price: 89.99,
+      price: 599.99,
       rating: 4.6,
       reviews: 43,
       image: 'https://i.ibb.co/4DGBSnK/brake-rotors.jpg',
       badge: { text: 'In Stock', color: 'green' }
-    }
+    },
+    {
+    id: 19,
+    name: 'Timing Chain Kit - Toyota Corolla',
+    category: 'spare',
+    description: 'Complete timing chain kit for Corolla 2014-2019',
+    brand: ['toyota'],
+    price: 1899.99,
+    rating: 4.6,
+    reviews: 52,
+    image: 'https://i.ibb.co/tM2VTmtN/ChainKit.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 20,
+    name: 'Control Arm - Honda Civic',
+    category: 'spare',
+    description: 'Front lower control arm, fits Civic 2016-2020',
+    brand: ['honda'],
+    price: 1099.99,
+    rating: 4.5,
+    reviews: 45,
+    image: 'https://i.ibb.co/ksRBZVsb/Control-Arms.jpg',
+    badge: { text: 'Few Left', color: 'yellow' }
+  },
+  {
+    id: 21,
+    name: 'Clutch Kit - Nissan Sentra',
+    category: 'engine',
+    description: 'High-performance clutch set for Sentra 2012-2018',
+    brand: ['nissan'],
+    price: 2299.99,
+    rating: 4.7,
+    reviews: 37,
+    image: 'https://i.ibb.co/MDxMsRSC/Clutch-Kit-Nissan.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 22,
+    name: 'Ball Joint - Ford Focus',
+    category: 'brakes',
+    description: 'Heavy duty ball joint set for Focus 2013-2019',
+    brand: ['ford'],
+    price: 799.99,
+    rating: 4.3,
+    reviews: 29,
+    image: 'https://i.postimg.cc/qvt9b0pq/Ford-Joint.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 23,
+    name: 'Radiator Fan Assembly - BMW 3 Series',
+    category: 'cooling',
+    description: 'OEM fan motor and blade for BMW E90',
+    brand: ['bmw'],
+    price: 3149.99,
+    rating: 4.8,
+    reviews: 66,
+    image: 'https://i.ibb.co/5g6CMmFn/Fan-Assembly.jpg',
+    badge: { text: 'Sale', color: 'red' },
+    oldPrice: 3599.99
+  },
+  {
+    id: 24,
+    name: 'Oil Pan - Mercedes C-Class',
+    category: 'engine',
+    description: 'Reinforced aluminum oil pan for C180/C200 W204',
+    brand: ['mercedes'],
+    price: 1249.99,
+    rating: 4.4,
+    reviews: 21,
+    image: 'https://i.postimg.cc/bNLCjvzL/Mercedes-Oil-Pan.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 25,
+    name: 'Driveshaft - Chevrolet Cruze',
+    category: 'spare',
+    description: 'Front driveshaft, left side, fits Cruze 2011-2016',
+    brand: ['chevrolet'],
+    price: 1649.99,
+    rating: 4.5,
+    reviews: 33,
+    image: 'https://i.ibb.co/rf1GZ10q/Ford-Ball-Joint.jpg',
+    badge: { text: 'Few Left', color: 'yellow' }
+  },
+  {
+    id: 26,
+    name: 'Steering Rack - Hyundai Elantra',
+    category: 'spare',
+    description: 'Power steering rack, fits Elantra 2016-2020',
+    brand: ['hyundai'],
+    price: 2999.99,
+    rating: 4.6,
+    reviews: 40,
+    image: 'https://i.ibb.co/k2wnSzQt/Steering-Rack.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 27,
+    name: 'Fuel Pump Assembly - Kia Sportage',
+    category: 'engine',
+    description: 'OEM electric fuel pump for Sportage 2015-2019',
+    brand: ['kia'],
+    price: 2149.99,
+    rating: 4.7,
+    reviews: 50,
+    image: 'https://i.ibb.co/fG1ynfCd/FuelPump.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 28,
+    name: 'Axle Shaft - Audi A4',
+    category: 'spare',
+    description: 'Front CV axle shaft, fits A4 B8 2009-2016',
+    brand: ['audi'],
+    price: 2799.99,
+    rating: 4.6,
+    reviews: 36,
+    image: 'https://i.ibb.co/mfF05Xc/Audi-Assembly.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 29,
+    name: 'Water Pump - Peugeot 301',
+    category: 'cooling',
+    description: 'Durable OEM water pump for 1.6L engine',
+    brand: ['peugeot'],
+    price: 1199.99,
+    rating: 4.3,
+    reviews: 24,
+    image: 'https://i.postimg.cc/3Nsg3g0P/Peugeot.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 30,
+    name: 'Brake Booster - Suzuki Swift',
+    category: 'brakes',
+    description: 'High-efficiency vacuum booster for Swift 2013-2018',
+    brand: ['suzuki'],
+    price: 1749.99,
+    rating: 4.4,
+    reviews: 32,
+    image: 'https://i.postimg.cc/90ddbLfJ/Brake-Booster.png',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 31,
+    name: 'CV Joint Kit - Renault Logan',
+    category: 'spare',
+    description: 'Outer joint kit with boot and grease, fits Logan 2011-2019',
+    brand: ['renault'],
+    price: 849.99,
+    rating: 4.2,
+    reviews: 19,
+    image: 'https://i.postimg.cc/6qrPZLxN/Renault-Logan-Kit.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 32,
+    name: 'Engine Mount - Opel Astra',
+    category: 'engine',
+    description: 'Right side engine mount for Astra J 2009-2015',
+    brand: ['opel'],
+    price: 699.99,
+    rating: 4.5,
+    reviews: 22,
+    image: 'https://i.postimg.cc/7LrTsgpR/Opel-Engine-Mount.webp',
+    badge: { text: 'In Stock', color: 'green' }
+  },
+  {
+    id: 33,
+    name: 'Shock Absorber - Mitsubishi Lancer',
+    category: 'brakes',
+    description: 'Rear gas shock absorber, fits Lancer EX 2008-2017',
+    brand: ['mitsubishi'],
+    price: 1349.99,
+    rating: 4.4,
+    reviews: 30,
+    image: 'https://i.postimg.cc/fTyFyZtC/Lancer.webp',
+    badge: { text: 'Sale', color: 'red' },
+    oldPrice: 1499.99
+  },
+  {
+    id: 34,
+    name: 'Dashboard Camera - Full HD',
+    category: 'accessories',
+    description: 'Wide-angle dash cam with night vision and loop recording',
+    brand: ['subaru ', 'ford', 'toyota'],
+    price: 1149.99,
+    rating: 4.6,
+    reviews: 44,
+    image: 'https://i.postimg.cc/bNb6sRHC/Dashcam.jpg',
+    badge: { text: 'In Stock', color: 'green' }
+  }
   ];
+
+  // Calculate category counts
+  const categoryCounts = allProducts.reduce((acc, product) => {
+    acc[product.category] = (acc[product.category] || 0) + 1;
+    return acc;
+  }, {});
+
+  const categories = Object.entries(categoryCounts).map(([id, count]) => ({
+    id,
+    name: {
+      spare: 'Spare Parts',
+      fluids: 'Fluids',
+      batteries: 'Batteries',
+      lighting: 'Car Lighting',
+      carcare: 'Car Care',
+      accessories: 'Accessories',
+      engine: 'Engine Performance',
+      brakes: 'Brakes & Suspension',
+      electrical: 'Electrical',
+      filters: 'Filters',
+      cooling: 'Cooling System',
+      body: 'Body & Exterior',
+      interior: 'Interior'
+    }[id] || id,
+    count
+  }));
+
+  // Calculate actual brand counts from products
+  const brandCounts = allProducts.reduce((acc, product) => {
+    product.brand.forEach(brandId => {
+      acc[brandId] = (acc[brandId] || 0) + 1;
+    });
+    return acc;
+  }, {});
+
+  // Create brands array with accurate counts
+  const brands = [
+    { id: 'toyota', name: 'Toyota', count: brandCounts['toyota'] || 0 },
+    { id: 'honda', name: 'Honda', count: brandCounts['honda'] || 0 },
+    { id: 'bmw', name: 'BMW', count: brandCounts['bmw'] || 0 },
+    { id: 'mercedes', name: 'Mercedes', count: brandCounts['mercedes'] || 0 },
+    { id: 'ford', name: 'Ford', count: brandCounts['ford'] || 0 },
+    { id: 'chevrolet', name: 'Chevrolet', count: brandCounts['chevrolet'] || 0 },
+    { id: 'audi', name: 'Audi', count: brandCounts['audi'] || 0 },
+    { id: 'nissan', name: 'Nissan', count: brandCounts['nissan'] || 0 },
+    { id: 'hyundai', name: 'Hyundai', count: brandCounts['hyundai'] || 0 },
+    { id: 'kia', name: 'Kia', count: brandCounts['kia'] || 0 },
+    { id: 'volkswagen', name: 'Volkswagen', count: brandCounts['volkswagen'] || 0 },
+    { id: 'peugeot', name: 'Peugeot', count: brandCounts['peugeot'] || 0 },
+    { id: 'suzuki', name: 'Suzuki', count: brandCounts['suzuki'] || 0 },
+    { id: 'renault', name: 'Renault', count: brandCounts['renault'] || 0 },
+    { id: 'opel', name: 'Opel', count: brandCounts['opel'] || 0 },
+    { id: 'mitsubishi', name: 'Mitsubishi', count: brandCounts['mitsubishi'] || 0 },
+    { id: 'subaru ', name: 'Subaru ', count: brandCounts['subaru '] || 0 },
+    { id: 'fiat ', name: 'Fiat ', count: brandCounts['fiat '] || 0 },
+  ];
+
+  // Sort brands by count (most products first)
+  const sortedBrands = [...brands].sort((a, b) => b.count - a.count)
+    .filter(brand => brand.count > 0); // Only include brands that have products
 
   // State for installation service
   const [installationServices, setInstallationServices] = useState({});
@@ -440,11 +650,11 @@ const Shop = () => {
                 ))}
               </ul>
 
-              {/* Brand Filter Component */}
+              {/* Brand Filter Component - using sortedBrands */}
               <BrandFilter 
                 selectedBrands={brandFilter} 
                 toggleBrand={toggleBrand} 
-                allBrands={brands} 
+                allBrands={sortedBrands} 
               />
 
               <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Price Range</h3>
@@ -543,7 +753,7 @@ const Shop = () => {
                 <div className="mb-6">
                   <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Brands</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    {brands.slice(0, 8).map(brand => (
+                    {sortedBrands.slice(0, 8).map(brand => (
                       <button
                         key={brand.id}
                         className={`py-2 px-3 text-sm rounded ${brandFilter.includes(brand.id) ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
@@ -566,7 +776,7 @@ const Shop = () => {
                       <input
                         type="range"
                         min="0"
-                        max="300"
+                        max="10000"
                         value={priceRange[0]}
                         onChange={(e) => handlePriceChange(e, 0)}
                         className="w-full"
@@ -574,7 +784,7 @@ const Shop = () => {
                       <input
                         type="range"
                         min="0"
-                        max="300"
+                        max="10000"
                         value={priceRange[1]}
                         onChange={(e) => handlePriceChange(e, 1)}
                         className="w-full"
@@ -756,7 +966,7 @@ const Shop = () => {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {sortedProducts.map(product => (
+                  {paginatedProducts.map(product => (
                     <div key={product.id} className="bg-white rounded-xl shadow-md overflow-hidden">
                       <div className="flex flex-col md:flex-row">
                         <div className="md:w-1/3 relative">
@@ -802,7 +1012,7 @@ const Shop = () => {
                               {product.oldPrice && (
                                 <span className="text-gray-400 text-sm line-through mr-1">{formatPrice(product.oldPrice)}</span>
                               )}
-                              <span className="text-2xl font-bold text-gray-900">{formatPrice(product.oldPrice)}</span>
+                              <span className="text-2xl font-bold text-gray-900">{formatPrice(product.price)}</span>
                             </div>
                             <div className="flex items-center space-x-4">
                               <label className="flex items-center text-sm text-gray-600">
