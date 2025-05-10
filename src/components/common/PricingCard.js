@@ -28,7 +28,7 @@ const PricingCard = ({
           {plan}
         </h4>
         <div className={`text-3xl font-bold ${isPopular ? 'text-white' : 'text-blue-600'} mb-2`}>
-          ${price}
+          EGP {price}
         </div>
         <p className={`text-sm ${isPopular ? 'text-blue-100' : 'text-gray-600'}`}>
           {description}

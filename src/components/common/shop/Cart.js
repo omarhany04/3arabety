@@ -80,11 +80,11 @@ const Cart = () => {
                       <div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <h3>{item.name}</h3>
-                          <p className="ml-4">${(item.price * item.quantity).toFixed(2)}</p>
+                          <p className="ml-4">EGP {(item.price * item.quantity).toFixed(2)}</p>
                         </div>
                         {item.oldPrice && (
                           <p className="mt-1 text-sm text-gray-500 line-through">
-                            ${(item.oldPrice * item.quantity).toFixed(2)}
+                            EGP {(item.oldPrice * item.quantity).toFixed(2)}
                           </p>
                         )}
                       </div>
@@ -127,7 +127,7 @@ const Cart = () => {
                         </label>
                         {item.installationService && (
                           <div className="mt-1 text-xs text-gray-500">
-                            Installation: ${(item.price * item.quantity * 0.2).toFixed(2)}
+                            Installation: EGP {(item.price * item.quantity * 0.2).toFixed(2)}
                           </div>
                         )}
                       </div>
@@ -143,15 +143,15 @@ const Cart = () => {
             <div className="border-t border-gray-200 px-6 py-4">
               <div className="flex justify-between text-sm text-gray-600 mb-1">
                 <p>Subtotal</p>
-                <p>${subtotal.toFixed(2)}</p>
+                <p>EGP {subtotal.toFixed(2)}</p>
               </div>
               <div className="flex justify-between text-sm text-gray-600 mb-4">
                 <p>Tax (14%)</p>
-                <p>${tax.toFixed(2)}</p>
+                <p>EGP {tax.toFixed(2)}</p>
               </div>
               <div className="flex justify-between text-base font-medium text-gray-900 mb-6">
                 <p>Total</p>
-                <p>${total.toFixed(2)}</p>
+                <p>EGP {total.toFixed(2)}</p>
               </div>
               <Link
                 to="/checkout"

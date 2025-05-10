@@ -195,7 +195,7 @@ const SparePartsSupply = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-lg font-bold text-gray-900">${product.price}</span>
+                      <span className="text-lg font-bold text-gray-900">EGP {product.price}</span>
                     </div>
                     <button className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-md transition duration-300">
                       <ShoppingCart className="h-5 w-5" />

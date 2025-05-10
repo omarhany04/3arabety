@@ -128,31 +128,31 @@ const TowingService = () => {
                 icon: 'truck', 
                 title: 'Local Towing', 
                 description: 'Efficient towing to nearby service centers, your home, or preferred destination within city limits.',
-                price: 'Starting at $79.99'
+                price: 'Starting at EGP 79.99'
               },
               { 
                 icon: 'map', 
                 title: 'Long-Distance Towing', 
                 description: 'Safe transportation for your vehicle across longer distances and between cities.',
-                price: 'Starting at $2.99/mile'
+                price: 'Starting at EGP 2.99/mile'
               },
               { 
                 icon: 'alert-triangle', 
                 title: 'Accident Recovery', 
                 description: 'Specialized recovery service for vehicles involved in accidents or stuck in difficult situations.',
-                price: 'Starting at $129.99'
+                price: 'Starting at EGP 129.99'
               },
               { 
                 icon: 'briefcase', 
                 title: 'Luxury & Exotic Car Towing', 
                 description: 'Specialized equipment and extra care for high-value vehicles requiring additional attention.',
-                price: 'Starting at $149.99'
+                price: 'Starting at EGP 149.99'
               },
               { 
                 icon: 'truck', 
                 title: 'Heavy-Duty Towing', 
                 description: 'Towing service for larger vehicles including trucks, RVs, and commercial vehicles.',
-                price: 'Starting at $149.99'
+                price: 'Starting at EGP 149.99'
               },
               { 
                 icon: 'calendar', 

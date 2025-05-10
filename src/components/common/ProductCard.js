@@ -37,9 +37,9 @@ const ProductCard = ({ product }) => {
         <div className="flex items-center justify-between">
           <div>
             {oldPrice && (
-              <span className="text-gray-400 text-sm line-through">${oldPrice}</span>
+              <span className="text-gray-400 text-sm line-through">EGP {oldPrice}</span>
             )}
-            <span className="text-lg font-bold text-gray-900 ml-1">${price}</span>
+            <span className="text-lg font-bold text-gray-900 ml-1">EGP {price}</span>
           </div>
           <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md transition duration-300">
             <ShoppingCart className="h-5 w-5" />

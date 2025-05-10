@@ -15,7 +15,7 @@ const EmergencyAssistance = () => {
         
         <div className="flex flex-col lg:flex-row items-center mb-16">
           <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <img src="/images/placeholder/600/400" alt="Emergency Assistance" className="rounded-lg shadow-lg" />
+            <img src="https://i.ibb.co/gbm2nQqw/Emergency.jpg" alt="Emergency Assistance" className="rounded-lg shadow-lg" />
           </div>
           
           <div className="lg:w-1/2 lg:pl-16">
@@ -29,7 +29,7 @@ const EmergencyAssistance = () => {
                 <AlertCircle className="h-5 w-5 text-red-600 mr-2" />
                 Emergency Hotline
               </h4>
-              <div className="text-2xl font-bold text-red-600 mb-2">+1 (123) 456-7899</div>
+              <div className="text-2xl font-bold text-red-600 mb-2">19873</div>
               <p className="text-gray-600 text-sm">
                 Save this number in your phone for immediate assistance during emergencies.
               </p>
@@ -102,7 +102,7 @@ const EmergencyAssistance = () => {
                   Quickly get your vehicle started with our professional jump-start service. We'll also check your battery health to prevent future issues.
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                  $49.99
+                  EGP 49.99
                 </p>
               </div>
             </div>
@@ -120,7 +120,7 @@ const EmergencyAssistance = () => {
                   We'll replace your flat tire with your spare or provide temporary repair to get you to a service center.
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                  $59.99
+                  EGP 59.99
                 </p>
               </div>
             </div>
@@ -137,7 +137,7 @@ const EmergencyAssistance = () => {
                   Locked your keys in your car? Our technicians can safely unlock your vehicle without causing damage.
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                  $69.99
+                  EGP 69.99
                 </p>
               </div>
             </div>
@@ -155,7 +155,7 @@ const EmergencyAssistance = () => {
                   When your vehicle can't be fixed roadside, we'll tow it to the nearest service center or your preferred location.
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                  From $89.99
+                  From EGP 89.99
                 </p>
               </div>
             </div>
@@ -172,7 +172,7 @@ const EmergencyAssistance = () => {
                   Run out of gas? We'll deliver enough fuel to get you to the nearest gas station.
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                  $49.99 + fuel cost
+                  EGP 49.99 + fuel cost
                 </p>
               </div>
             </div>
@@ -189,7 +189,7 @@ const EmergencyAssistance = () => {
                   Our mobile mechanics can diagnose and often fix common issues right at your location.
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                  $79.99
+                  EGP 79.99
                 </p>
               </div>
             </div>
@@ -210,7 +210,7 @@ const EmergencyAssistance = () => {
             <div className="pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-200">
               <div className="bg-red-50 p-6 text-center border-b border-gray-200">
                 <h4 className="text-xl font-bold text-gray-900 mb-2">Basic Plan</h4>
-                <div className="text-3xl font-bold text-red-600 mb-2">$99/year</div>
+                <div className="text-3xl font-bold text-red-600 mb-2">EGP 99/year</div>
                 <p className="text-gray-600 text-sm">Essential coverage for occasional drivers</p>
               </div>
               <div className="p-6">
@@ -247,7 +247,7 @@ const EmergencyAssistance = () => {
             <div className="pricing-card bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 border-2 border-red-600 transform scale-105">
               <div className="bg-red-600 p-6 text-center">
                 <h4 className="text-xl font-bold text-white mb-2">Premium Plan</h4>
-                <div className="text-3xl font-bold text-white mb-2">$179/year</div>
+                <div className="text-3xl font-bold text-white mb-2">EGP 179/year</div>
                 <p className="text-red-100 text-sm">Complete coverage for daily drivers</p>
               </div>
               <div className="p-6">
@@ -282,7 +282,7 @@ const EmergencyAssistance = () => {
             <div className="pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-200">
               <div className="bg-red-50 p-6 text-center border-b border-gray-200">
                 <h4 className="text-xl font-bold text-gray-900 mb-2">Ultimate Plan</h4>
-                <div className="text-3xl font-bold text-red-600 mb-2">$249/year</div>
+                <div className="text-3xl font-bold text-red-600 mb-2">EGP 249/year</div>
                 <p className="text-gray-600 text-sm">Unlimited coverage for families</p>
               </div>
               <div className="p-6">

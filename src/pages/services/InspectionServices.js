@@ -124,7 +124,7 @@ const InspectionServices = () => {
                   </li>
                 </ul>
                 <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-gray-900">$149.99</span>
+                  <span className="text-xl font-bold text-gray-900">EGP 149.99</span>
                   <Link to="/contact" className="text-green-600 font-medium hover:text-green-800 transition duration-300">
                     Book Now
                   </Link>
@@ -160,7 +160,7 @@ const InspectionServices = () => {
                   </li>
                 </ul>
                 <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-gray-900">$129.99</span>
+                  <span className="text-xl font-bold text-gray-900">EGP 129.99</span>
                   <Link to="/contact" className="text-green-600 font-medium hover:text-green-800 transition duration-300">
                     Book Now
                   </Link>
@@ -196,7 +196,7 @@ const InspectionServices = () => {
                   </li>
                 </ul>
                 <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-gray-900">$89.99</span>
+                  <span className="text-xl font-bold text-gray-900">EGP 89.99</span>
                   <Link to="/contact" className="text-green-600 font-medium hover:text-green-800 transition duration-300">
                     Book Now
                   </Link>

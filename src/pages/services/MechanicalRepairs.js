@@ -129,7 +129,7 @@ const MechanicalRepairs = () => {
             <div className="pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-200">
               <div className="bg-blue-50 p-6 text-center border-b border-gray-200">
                 <h4 className="text-xl font-bold text-gray-900 mb-2">Basic Diagnostics</h4>
-                <div className="text-3xl font-bold text-blue-600 mb-2">$49.99</div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">EGP 49.99</div>
                 <p className="text-gray-600 text-sm">For basic mechanical issues</p>
               </div>
               <div className="p-6">
@@ -164,7 +164,7 @@ const MechanicalRepairs = () => {
             <div className="pricing-card bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 border-2 border-blue-600 transform scale-105">
               <div className="bg-blue-600 p-6 text-center">
                 <h4 className="text-xl font-bold text-white mb-2">Standard Service</h4>
-                <div className="text-3xl font-bold text-white mb-2">$149.99</div>
+                <div className="text-3xl font-bold text-white mb-2">EGP 149.99</div>
                 <p className="text-blue-100 text-sm">For common mechanical repairs</p>
               </div>
               <div className="p-6">
@@ -199,7 +199,7 @@ const MechanicalRepairs = () => {
             <div className="pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-200">
               <div className="bg-blue-50 p-6 text-center border-b border-gray-200">
                 <h4 className="text-xl font-bold text-gray-900 mb-2">Premium Service</h4>
-                <div className="text-3xl font-bold text-blue-600 mb-2">$299.99</div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">EGP 299.99</div>
                 <p className="text-gray-600 text-sm">For complex mechanical issues</p>
               </div>
               <div className="p-6">

@@ -1,4 +1,4 @@
-// src/pages/Shop.js - Updated version with brand filtering and cart integration
+// src/pages/Shop.js - Enhanced version with additional product categories and items
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Filter, Grid, List, ChevronDown, ChevronUp, Search } from 'react-feather';
@@ -14,20 +14,28 @@ const Shop = () => {
   const [brandFilter, setBrandFilter] = useState([]);
   const [sortBy, setSortBy] = useState('popular');
   const [viewMode, setViewMode] = useState('grid');
-  const [priceRange, setPriceRange] = useState([0, 300]);
+  const [priceRange, setPriceRange] = useState([0, 10000]);
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 9;
 
-  // Sample categories
+
+  // Sample categories (Updated to match the image categories)
   const categories = [
-    { id: 'engine', name: 'Engine Parts', count: 124 },
-    { id: 'brakes', name: 'Brakes & Suspension', count: 85 },
-    { id: 'electrical', name: 'Electrical', count: 63 },
-    { id: 'oils', name: 'Oils & Fluids', count: 41 },
-    { id: 'filters', name: 'Filters', count: 38 },
-    { id: 'cooling', name: 'Cooling System', count: 29 },
-    { id: 'body', name: 'Body & Exterior', count: 54 },
-    { id: 'interior', name: 'Interior & Accessories', count: 72 }
+    { id: 'spare', name: 'Spare Parts', count: 124 },
+    { id: 'fluids', name: 'Fluids', count: 85 },
+    { id: 'batteries', name: 'Batteries', count: 63 },
+    { id: 'lighting', name: 'Car Lighting', count: 41 },
+    { id: 'carcare', name: 'Car Care', count: 38 },
+    { id: 'accessories', name: 'Accessories', count: 54 },
+    { id: 'engine', name: 'Engine Performance', count: 72 },
+    { id: 'brakes', name: 'Brakes & Suspension', count: 67 },
+    { id: 'electrical', name: 'Electrical', count: 53 },
+    { id: 'filters', name: 'Filters', count: 48 },
+    { id: 'cooling', name: 'Cooling System', count: 39 },
+    { id: 'body', name: 'Body & Exterior', count: 45 },
+    { id: 'interior', name: 'Interior', count: 62 }
   ];
 
   // Sample brands
@@ -48,12 +56,202 @@ const Shop = () => {
     { id: 'renault', name: 'Renault', count: 27 },
     { id: 'opel', name: 'Opel', count: 19 },
     { id: 'mitsubishi', name: 'Mitsubishi', count: 18 },
+    { id: 'bosch', name: 'Bosch', count: 64 },
+    { id: 'castrol', name: 'Castrol', count: 37 },
+    { id: 'mobil', name: 'Mobil', count: 31 },
+    { id: 'shell', name: 'Shell', count: 29 }
   ];
 
-  // Sample products
+  // Sample products (Enhanced with more items based on image categories)
   const allProducts = [
+    // Spare Parts
     {
       id: 1,
+      name: 'Premium Brake Disc',
+      category: 'spare',
+      description: 'High performance brake rotor',
+      brand: ['toyota', 'honda', 'nissan'],
+      price: 45.99,
+      rating: 4.7,
+      reviews: 58,
+      image: 'https://i.ibb.co/YB2yPnCf/Break-Disc.png',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    {
+      id: 2,
+      name: 'Serpentine Belt',
+      category: 'spare',
+      description: 'Premium quality drive belt',
+      brand: ['ford', 'chevrolet', 'toyota'],
+      price: 29.99,
+      rating: 4.5,
+      reviews: 42,
+      image: 'https://i.ibb.co/4nFpmYYK/Serpentine.jpg',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    
+    // Fluids
+    {
+      id: 3,
+      name: 'Synthetic Engine Oil',
+      category: 'fluids',
+      description: '5W-30, 5 liter container',
+      brand: ['castrol', 'mobil', 'shell'],
+      price: 1199.99,
+      rating: 4.8,
+      reviews: 122,
+      image: 'https://i.ibb.co/Xf2sdYGg/Synthetic-Engine-Oil.jpg',
+      badge: { text: 'Sale', color: 'red' },
+      oldPrice: 44.99
+    },
+    {
+      id: 4,
+      name: 'Antifreeze & Coolant',
+      category: 'fluids',
+      description: 'All-season protection, 1 gallon',
+      brand: ['shell', 'mobil'],
+      price: 619.99,
+      rating: 4.3,
+      reviews: 37,
+      image: 'https://i.ibb.co/FLn6rkN4/Radiator-Coolant.jpg',
+      badge: { text: 'Sale', color: 'red' },
+      oldPrice: 24.99
+    },
+    
+    // Batteries
+    {
+      id: 5,
+      name: 'Car Battery',
+      category: 'batteries',
+      description: '12V 60Ah, high performance',
+      brand: ['bosch', 'toyota', 'honda', 'nissan', 'hyundai', 'kia'],
+      price: 2499.99,
+      rating: 4.7,
+      reviews: 89,
+      image: 'https://i.ibb.co/Sw4yjNs7/Car-Battery.jpg',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    {
+      id: 6,
+      name: 'Heavy Duty Truck Battery',
+      category: 'batteries',
+      description: '12V 100Ah, for commercial vehicles',
+      brand: ['bosch', 'ford', 'chevrolet'],
+      price: 4349.99,
+      rating: 4.6,
+      reviews: 48,
+      image: 'https://i.ibb.co/4nsddYn7/Heavy-Battery.jpg',
+      badge: { text: 'Few Left', color: 'yellow' }
+    },
+    
+    // Car Lighting
+    {
+      id: 7,
+      name: 'LED Headlight Pair',
+      category: 'lighting',
+      description: 'High/low beam, fits most models',
+      brand: ['bosch', 'toyota', 'honda', 'bmw'],
+      price: 149.99,
+      rating: 4.9,
+      reviews: 76,
+      image: 'https://i.ibb.co/JjDtwb4R/Led.jpgs',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    {
+      id: 8,
+      name: 'Fog Light Kit',
+      category: 'lighting',
+      description: 'Universal fit with mounting hardware',
+      brand: ['bmw', 'mercedes', 'volkswagen'],
+      price: 65.99,
+      rating: 4.4,
+      reviews: 53,
+      image: 'https://i.ibb.co/mVCZSwhk/Fog-Lights.jpg',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    
+    // Car Care
+    {
+      id: 9,
+      name: 'Car Cleaning Kit',
+      category: 'carcare',
+      description: 'Complete kit with shampoo, wax and microfiber cloths',
+      brand: ['sonax'],
+      price: 49.99,
+      rating: 4.8,
+      reviews: 112,
+      image: 'https://i.ibb.co/S4YBKYQ1/Cleaning-Kit.jpg',
+      badge: { text: 'Best Seller', color: 'green' }
+    },
+    {
+      id: 10,
+      name: 'Wheel Cleaner Spray',
+      category: 'carcare',
+      description: 'Professional grade, acid-free formula',
+      brand: ['sonax'],
+      price: 14.99,
+      rating: 4.6,
+      reviews: 87,
+      image: 'https://i.ibb.co/35jf49BF/Wheel-Clean.webp',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    
+    // Accessories
+    {
+      id: 11,
+      name: 'All-Weather Floor Mats',
+      category: 'accessories',
+      description: 'Set of 4, custom fit for most vehicles',
+      brand: ['toyota', 'honda', 'ford'],
+      price: 69.99,
+      rating: 4.7,
+      reviews: 156,
+      image: 'https://i.ibb.co/kbL6XrG/Floor-Mats.png',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    {
+      id: 12,
+      name: 'Car Phone Mount',
+      category: 'accessories',
+      description: 'Universal fit, dashboard or vent mounting',
+      brand: [],
+      price: 19.99,
+      rating: 4.5,
+      reviews: 203,
+      image: 'https://i.ibb.co/GGyLbqR/Phone-Holder.jpg',
+      badge: { text: 'Sale', color: 'red' },
+      oldPrice: 24.99
+    },
+    
+    // Engine Performance
+    {
+      id: 13,
+      name: 'High-Flow Air Filter',
+      category: 'engine',
+      description: 'Washable and reusable performance filter',
+      brand: ['bmw', 'audi', 'mercedes'],
+      price: 49.99,
+      rating: 4.6,
+      reviews: 78,
+      image: 'https://i.ibb.co/k2xw4r2B/High-Flow-Air-Filter.jpg',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    {
+      id: 14,
+      name: 'Fuel Injector Cleaner',
+      category: 'engine',
+      description: 'Professional strength formula, 16oz bottle',
+      brand: ['castrol', 'mobil', 'shell'],
+      price: 12.99,
+      rating: 4.4,
+      reviews: 91,
+      image: 'https://i.ibb.co/qMgZ1nBt/Injector.jpg',
+      badge: { text: 'In Stock', color: 'green' }
+    },
+    
+    // Original products
+    {
+      id: 15,
       name: 'Premium Oil Filter',
       category: 'filters',
       description: 'Fits multiple vehicle makes',
@@ -61,11 +259,11 @@ const Shop = () => {
       price: 12.99,
       rating: 4.5,
       reviews: 42,
-      image: '/images/placeholder/300/200',
+      image: 'https://i.ibb.co/cdfvy7k/oil-filter.jpg',
       badge: { text: 'In Stock', color: 'green' }
     },
     {
-      id: 2,
+      id: 16,
       name: 'Ceramic Brake Pads',
       category: 'brakes',
       description: 'Front set for Toyota/Honda',
@@ -73,23 +271,11 @@ const Shop = () => {
       price: 49.99,
       rating: 5,
       reviews: 67,
-      image: '/images/placeholder/300/200',
+      image: 'https://i.ibb.co/Z6PCx1D9/Ceramic-Brakes.jpg',
       badge: { text: 'In Stock', color: 'green' }
     },
     {
-      id: 3,
-      name: 'Performance Air Filter',
-      category: 'filters',
-      description: 'Reusable, high-flow design',
-      brand: ['bmw', 'audi', 'mercedes'],
-      price: 39.99,
-      rating: 4,
-      reviews: 29,
-      image: '/images/placeholder/300/200',
-      badge: { text: 'Few Left', color: 'yellow' }
-    },
-    {
-      id: 4,
+      id: 17,
       name: 'Platinum Spark Plugs',
       category: 'electrical',
       description: 'Set of 4, extended life',
@@ -97,36 +283,11 @@ const Shop = () => {
       price: 29.99,
       rating: 4.5,
       reviews: 53,
-      image: 'https://i.ibb.co/cdfvy7k/Spark-Plugs.webp',
+      image: 'https://i.ibb.co/cdfvy7k/spark-plugs.jpg',
       badge: { text: 'In Stock', color: 'green' }
     },
     {
-      id: 5,
-      name: 'Synthetic Engine Oil',
-      category: 'oils',
-      description: '5W-30, 5 liter container',
-      brand: ['bmw', 'audi', 'mercedes', 'volkswagen'],
-      price: 34.99,
-      rating: 4.8,
-      reviews: 122,
-      image: '/images/placeholder/300/200',
-      badge: { text: 'Sale', color: 'red' },
-      oldPrice: 44.99
-    },
-    {
-      id: 6,
-      name: 'Car Battery',
-      category: 'electrical',
-      description: '12V 60Ah, high performance',
-      brand: ['toyota', 'honda', 'nissan', 'hyundai', 'kia'],
-      price: 129.99,
-      rating: 4.7,
-      reviews: 89,
-      image: 'https://i.ibb.co/TD724Hpc/Car-Battery.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 7,
+      id: 18,
       name: 'Brake Rotors',
       category: 'brakes',
       description: 'Front pair, cross-drilled',
@@ -134,21 +295,8 @@ const Shop = () => {
       price: 89.99,
       rating: 4.6,
       reviews: 43,
-      image: 'https://i.ibb.co/4DGBSnK/Brake-Rotors.jpg',
+      image: 'https://i.ibb.co/4DGBSnK/brake-rotors.jpg',
       badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 8,
-      name: 'Radiator Coolant',
-      category: 'cooling',
-      description: 'All-season protection, 1 gallon',
-      brand: ['ford', 'chevrolet', 'toyota', 'honda'],
-      price: 19.99,
-      rating: 4.3,
-      reviews: 37,
-      image: 'https://i.ibb.co/HTdD0cWc/Radiator-Coolant.jpg',
-      badge: { text: 'Sale', color: 'red' },
-      oldPrice: 24.99
     }
   ];
 
@@ -188,13 +336,16 @@ const Shop = () => {
     if (product.price < priceRange[0] || product.price > priceRange[1]) return false;
     
     // Apply search filter
-    if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
+        !product.description.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
     
     return true;
   });
 
   // Sort products
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case 'price-low':
         return a.price - b.price;
@@ -207,6 +358,12 @@ const Shop = () => {
     }
   });
 
+  // Pagination logic
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const paginatedProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+
   // Handler for price range filter
   const handlePriceChange = (e, index) => {
     const newRange = [...priceRange];
@@ -218,9 +375,16 @@ const Shop = () => {
   const resetFilters = () => {
     setCategoryFilter('all');
     setBrandFilter([]);
-    setPriceRange([0, 300]);
+    setPriceRange([0, 10000]);
     setSearchQuery('');
   };
+
+  const formatPrice = (price) =>
+  new Intl.NumberFormat('en-EG', {
+    style: 'currency',
+    currency: 'EGP',
+    maximumFractionDigits: 2,
+  }).format(price);
 
   return (
     <div className="bg-gray-50 py-16">
@@ -286,14 +450,14 @@ const Shop = () => {
               <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Price Range</h3>
               <div className="px-2 mb-6">
                 <div className="flex justify-between mb-2">
-                  <span>${priceRange[0]}</span>
-                  <span>${priceRange[1]}</span>
+                  <span>EGP {priceRange[0]}</span>
+                  <span>EGP {priceRange[1]}</span>
                 </div>
                 <div className="mb-4">
                   <input
                     type="range"
                     min="0"
-                    max="300"
+                    max="10000"
                     value={priceRange[0]}
                     onChange={(e) => handlePriceChange(e, 0)}
                     className="w-full"
@@ -301,7 +465,7 @@ const Shop = () => {
                   <input
                     type="range"
                     min="0"
-                    max="300"
+                    max="10000"
                     value={priceRange[1]}
                     onChange={(e) => handlePriceChange(e, 1)}
                     className="w-full"
@@ -309,7 +473,7 @@ const Shop = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex items-center">
-                    <span className="text-gray-600 text-sm mr-2">Min: $</span>
+                    <span className="text-gray-600 text-sm mr-2">Min: EGP</span>
                     <input
                       type="number"
                       min="0"
@@ -320,11 +484,11 @@ const Shop = () => {
                     />
                   </div>
                   <div className="flex items-center">
-                    <span className="text-gray-600 text-sm mr-2">Max: $</span>
+                    <span className="text-gray-600 text-sm mr-2">Max: EGP</span>
                     <input
                       type="number"
                       min={priceRange[0]}
-                      max="300"
+                      max="10000"
                       value={priceRange[1]}
                       onChange={(e) => handlePriceChange(e, 1)}
                       className="w-full bg-gray-50 border border-gray-300 rounded px-2 py-1 text-gray-700 text-sm"
@@ -364,7 +528,7 @@ const Shop = () => {
                     >
                       All Products
                     </button>
-                    {categories.map(cat => (
+                    {categories.slice(0, 9).map(cat => (
                       <button
                         key={cat.id}
                         className={`py-2 px-3 text-sm rounded ${categoryFilter === cat.id ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
@@ -395,8 +559,8 @@ const Shop = () => {
                   <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Price Range</h3>
                   <div className="px-2">
                     <div className="flex justify-between mb-2">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
+                      <span>EGP {priceRange[0]}</span>
+                      <span>EGP {priceRange[1]}</span>
                     </div>
                     <div className="mb-4">
                       <input
@@ -519,10 +683,10 @@ const Shop = () => {
             ) : (
               viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {sortedProducts.map(product => (
+                  {paginatedProducts.map(product => (
                     <div key={product.id} className="bg-white rounded-xl shadow-md overflow-hidden">
                       <div className="relative">
-                        <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+                        <img src={product.image || `/images/placeholder/300/200`} alt={product.name} className="w-full h-48 object-cover" />
                         {product.badge && (
                           <div className="absolute top-2 right-2">
                             <span className={`bg-${product.badge.color}-500 text-white text-xs px-2 py-1 rounded-md`}>
@@ -563,9 +727,9 @@ const Shop = () => {
                         <div className="flex items-center justify-between">
                           <div>
                             {product.oldPrice && (
-                              <span className="text-gray-400 text-sm line-through mr-1">${product.oldPrice}</span>
+                              <span className="text-gray-400 text-sm line-through mr-1">{formatPrice(product.oldPrice)}</span>
                             )}
-                            <span className="text-lg font-bold text-gray-900">${product.price}</span>
+                            <span className="text-lg font-bold text-gray-900">{formatPrice(product.price)}</span>
                           </div>
                           <button 
                             className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md transition duration-300"
@@ -596,7 +760,7 @@ const Shop = () => {
                     <div key={product.id} className="bg-white rounded-xl shadow-md overflow-hidden">
                       <div className="flex flex-col md:flex-row">
                         <div className="md:w-1/3 relative">
-                          <img src={product.image} alt={product.name} className="w-full h-48 md:h-full object-cover" />
+                          <img src={product.image || `/images/placeholder/300/200`} alt={product.name} className="w-full h-48 md:h-full object-cover" />
                           {product.badge && (
                             <div className="absolute top-2 right-2">
                               <span className={`bg-${product.badge.color}-500 text-white text-xs px-2 py-1 rounded-md`}>
@@ -636,9 +800,9 @@ const Shop = () => {
                           <div className="mt-auto flex justify-between items-center">
                             <div>
                               {product.oldPrice && (
-                                <span className="text-gray-400 text-sm line-through mr-1">${product.oldPrice}</span>
+                                <span className="text-gray-400 text-sm line-through mr-1">{formatPrice(product.oldPrice)}</span>
                               )}
-                              <span className="text-2xl font-bold text-gray-900">${product.price}</span>
+                              <span className="text-2xl font-bold text-gray-900">{formatPrice(product.oldPrice)}</span>
                             </div>
                             <div className="flex items-center space-x-4">
                               <label className="flex items-center text-sm text-gray-600">
@@ -667,31 +831,37 @@ const Shop = () => {
             )}
 
             {/* Pagination */}
+            {sortedProducts.length > 0 && (
             <div className="flex justify-center mt-8">
               <nav className="flex space-x-2" aria-label="Pagination">
-                <a href="#" className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                >
                   Previous
-                </a>
-                <a href="#" className="px-3 py-2 rounded-md bg-blue-600 text-sm font-medium text-white">
-                  1
-                </a>
-                <a href="#" className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  2
-                </a>
-                <a href="#" className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  3
-                </a>
-                <span className="px-3 py-2 rounded-md border border-gray-300 text-sm font-medium text-gray-500">
-                  ...
-                </span>
-                <a href="#" className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  8
-                </a>
-                <a href="#" className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50">
+                </button>
+
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-500 hover:bg-gray-50'}`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                >
                   Next
-                </a>
+                </button>
               </nav>
             </div>
+            )}
           </div>
         </div>
       </div>

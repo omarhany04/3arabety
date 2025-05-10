@@ -96,7 +96,7 @@ const CarWashCare = () => {
             <div className="pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-200">
               <div className="bg-blue-50 p-6 text-center border-b border-gray-200">
                 <h4 className="text-xl font-bold text-gray-900 mb-2">Express Wash</h4>
-                <div className="text-3xl font-bold text-blue-600 mb-2">$19.99</div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">EGP 19.99</div>
                 <p className="text-gray-600 text-sm">Quick exterior clean</p>
               </div>
               <div className="p-6">
@@ -134,7 +134,7 @@ const CarWashCare = () => {
             <div className="pricing-card bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 border-2 border-blue-600 transform scale-105">
               <div className="bg-blue-600 p-6 text-center">
                 <h4 className="text-xl font-bold text-white mb-2">Deluxe Wash</h4>
-                <div className="text-3xl font-bold text-white mb-2">$49.99</div>
+                <div className="text-3xl font-bold text-white mb-2">EGP 49.99</div>
                 <p className="text-blue-100 text-sm">Complete interior & exterior</p>
               </div>
               <div className="p-6">
@@ -172,7 +172,7 @@ const CarWashCare = () => {
             <div className="pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-200">
               <div className="bg-blue-50 p-6 text-center border-b border-gray-200">
                 <h4 className="text-xl font-bold text-gray-900 mb-2">Premium Detail</h4>
-                <div className="text-3xl font-bold text-blue-600 mb-2">$129.99</div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">EGP 129.99</div>
                 <p className="text-gray-600 text-sm">Comprehensive detailing service</p>
               </div>
               <div className="p-6">
@@ -225,37 +225,37 @@ const CarWashCare = () => {
                 icon: <Shield className="h-6 w-6 text-blue-600" />,
                 title: 'Paint Protection',
                 description: 'Advanced ceramic coating that provides long-lasting protection against scratches, UV rays, and contaminants.',
-                price: 'From $299'
+                price: 'From EGP 299'
               },
               { 
                 icon: <Zap className="h-6 w-6 text-blue-600" />,
                 title: 'Headlight Restoration',
                 description: 'Restore cloudy, yellowed headlights to like-new condition, improving visibility and appearance.',
-                price: '$79.99'
+                price: 'EGP 79.99'
               },
               { 
                 icon: <Wind className="h-6 w-6 text-blue-600" />,
                 title: 'Odor Elimination',
                 description: 'Advanced ozone treatment to eliminate persistent odors from smoke, pets, food, and more.',
-                price: '$89.99'
+                price: 'EGP 89.99'
               },
               { 
                 icon: <TrendingUp className="h-6 w-6 text-blue-600" />,
                 title: 'Paint Correction',
                 description: 'Professional machine polishing to remove swirl marks, scratches, and restore paint brilliance.',
-                price: 'From $199'
+                price: 'From EGP 199'
               },
               { 
                 icon: <Droplet className="h-6 w-6 text-blue-600" />,
                 title: 'Interior Deep Clean',
                 description: 'Thorough cleaning of upholstery, carpets, and all interior surfaces with steam cleaning and extraction.',
-                price: '$149.99'
+                price: 'EGP 149.99'
               },
               { 
                 icon: <Sun className="h-6 w-6 text-blue-600" />,
                 title: 'Window Tinting',
                 description: 'Professional window tinting with high-quality films that reduce heat, block UV rays, and enhance privacy.',
-                price: 'From $249'
+                price: 'From EGP 249'
               }
             ].map((service, index) => (
               <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden">
@@ -299,11 +299,11 @@ const CarWashCare = () => {
                 <ul className="space-y-2 mb-6">
                   <li className="flex items-center text-sm text-gray-600">
                     <Check className="h-4 w-4 text-blue-500 mr-2" />
-                    Unlimited express washes starting at $29.99/month
+                    Unlimited express washes starting at EGP 29.99/month
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <Check className="h-4 w-4 text-blue-500 mr-2" />
-                    Unlimited deluxe washes starting at $59.99/month
+                    Unlimited deluxe washes starting at EGP 59.99/month
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <Check className="h-4 w-4 text-blue-500 mr-2" />
@@ -319,7 +319,7 @@ const CarWashCare = () => {
                 </Link>
               </div>
               <div className="md:w-1/2">
-                <img src="/images/placeholder/500/300" alt="Wash Club Membership" className="rounded-lg shadow-md" />
+                <img src="https://i.ibb.co/LXZdk2cf/WashClub.jpg" alt="Wash Club Membership" className="rounded-lg shadow-md" />
               </div>
             </div>
           </div>
