@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, Search } from 'react-feather';
 import CartButton from '../common/shop/CartButton';
 import { FaCarSide } from 'react-icons/fa';
+import ModernSearch from '../common/ModernSearch';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -105,9 +106,7 @@ const Header = () => {
           
           {/* Action Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="text-gray-600 hover:text-blue-600">
-              <Search className="h-5 w-5" />
-            </button>
+            <ModernSearch />
             <CartButton />
           </div>
         </div>
@@ -136,9 +135,7 @@ const Header = () => {
           <NavLink to="/locations" className="block text-gray-600 hover:text-blue-600 font-medium">Locations</NavLink>
           <NavLink to="/contact" className="block text-gray-600 hover:text-blue-600 font-medium">Contact</NavLink>
           <div className="pt-4 flex items-center justify-between border-t border-gray-200">
-            <button className="text-gray-600 hover:text-blue-600">
-              <Search className="h-5 w-5" />
-            </button>
+            <ModernSearch />
             <CartButton />
           </div>
         </div>

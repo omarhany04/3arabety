@@ -16,6 +16,7 @@ import Checkout from './pages/Checkout';
 import { CartProvider } from './context/CartContext';
 import Cart from './components/common/shop/Cart';
 import ScrollToTop from './components/common/ScrollToTop';
+import SearchResults from './pages/SearchResults';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/search" element={<SearchResults />} />
               <Route path="/locations" element={<Locations />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/checkout" element={<Checkout />} />
