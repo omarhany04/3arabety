@@ -65,7 +65,7 @@ const Shop = () => {
       price: 29.99,
       rating: 4.5,
       reviews: 53,
-      image: '/images/placeholder/300/200',
+      image: 'https://i.ibb.co/cdfvy7k/Spark-Plugs.webp',
       badge: { text: 'In Stock', color: 'green' }
     },
     {
@@ -88,7 +88,7 @@ const Shop = () => {
       price: 129.99,
       rating: 4.7,
       reviews: 89,
-      image: '/images/placeholder/300/200',
+      image: 'https://i.ibb.co/TD724Hpc/Car-Battery.jpg',
       badge: { text: 'In Stock', color: 'green' }
     },
     {
@@ -99,7 +99,7 @@ const Shop = () => {
       price: 89.99,
       rating: 4.6,
       reviews: 43,
-      image: '/images/placeholder/300/200',
+      image: 'https://i.ibb.co/4DGBSnK/Brake-Rotors.jpg',
       badge: { text: 'In Stock', color: 'green' }
     },
     {
@@ -110,7 +110,7 @@ const Shop = () => {
       price: 19.99,
       rating: 4.3,
       reviews: 37,
-      image: '/images/placeholder/300/200',
+      image: 'https://i.ibb.co/HTdD0cWc/Radiator-Coolant.jpg',
       badge: { text: 'Sale', color: 'red' },
       oldPrice: 24.99
     }

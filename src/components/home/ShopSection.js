@@ -14,7 +14,7 @@ const ShopSection = () => {
       reviews: 42,
       price: 39.99,
       oldPrice: 49.99,
-      image: '/images/placeholder/300/200',
+      image: 'https://i.ibb.co/r22BzGYk/Premium-Oil.webp',
       badge: 'Sale'
     },
     {
@@ -24,7 +24,7 @@ const ShopSection = () => {
       rating: 5,
       reviews: 56,
       price: 75.00,
-      image: '/images/placeholder/300/200'
+      image: 'https://i.ibb.co/YBHdN0Qm/BrakePad.jpg'
     },
     {
       id: 3,
@@ -33,7 +33,7 @@ const ShopSection = () => {
       rating: 3,
       reviews: 18,
       price: 24.99,
-      image: '/images/placeholder/300/200',
+      image: 'https://i.ibb.co/qYNHKjrJ/Air-Filter.webp',
       badge: 'New'
     },
     {
@@ -43,7 +43,7 @@ const ShopSection = () => {
       rating: 4.5,
       reviews: 31,
       price: 129.99,
-      image: '/images/placeholder/300/200'
+      image: 'https://i.ibb.co/TD724Hpc/Car-Battery.jpg'
     }
   ];
 

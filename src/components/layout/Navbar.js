@@ -22,7 +22,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <span className="text-blue-600"><Activity className="h-8 w-8" /></span>
-              <span className="ml-2 text-2xl font-bold text-gray-800">Auto<span className="text-blue-600">Expert</span></span>
+              <span className="ml-2 text-2xl font-bold text-gray-800">3arabety</span>
             </Link>
           </div>
           

@@ -50,8 +50,8 @@ const ContactSection = () => {
                 <div className="ml-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-1">Our Head Office</h3>
                   <p className="text-gray-600">
-                    123 Automotive Avenue<br />
-                    New York, NY 10001
+                    21 El Nasr Road<br />
+                    Smouha, Alexandria, Egypt
                   </p>
                 </div>
               </div>
@@ -65,8 +65,8 @@ const ContactSection = () => {
                 <div className="ml-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-1">Phone</h3>
                   <p className="text-gray-600">
-                    Customer Support: <a href="tel:+11234567890" className="hover:text-blue-600">+1 (123) 456-7890</a><br />
-                    Emergency: <a href="tel:+11234567899" className="hover:text-blue-600">+1 (123) 456-7899</a>
+                    Customer Support: <a href="tel:+11234567890" className="hover:text-blue-600">+20 (10) 123-456-78</a><br />
+                    Emergency: <a href="tel:+11234567899" className="hover:text-blue-600">+20 (12) 345-678-91</a>
                   </p>
                 </div>
               </div>
@@ -95,7 +95,7 @@ const ContactSection = () => {
                 <div className="ml-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-1">Operating Hours</h3>
                   <p className="text-gray-600">
-                    Monday - Friday: 8:00 AM - 6:00 PM<br />
+                    Saturday - Thursday: 10:00 AM - 10:00 PM<br />
                     Emergency Services: 24/7
                   </p>
                 </div>

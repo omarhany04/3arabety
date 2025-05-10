@@ -22,7 +22,7 @@ const Header = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <span className="text-blue-600"><Activity className="h-8 w-8" /></span>
-              <span className="ml-2 text-2xl font-bold text-gray-800">Auto<span className="text-blue-600">Expert</span></span>
+              <span className="ml-2 text-2xl font-bold text-gray-800">3arabety</span>
             </Link>
           </div>
           
@@ -79,9 +79,6 @@ const Header = () => {
               <ShoppingCart className="h-5 w-5" />
               <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
             </Link>
-            <Link to="/contact" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium transition duration-300">
-              24/7 Help
-            </Link>
           </div>
         </div>
         
@@ -109,9 +106,6 @@ const Header = () => {
             <Link to="/shop" className="text-gray-600 hover:text-blue-600 relative">
               <ShoppingCart className="h-5 w-5" />
               <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
-            </Link>
-            <Link to="/contact" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium transition duration-300">
-              24/7 Help
             </Link>
           </div>
         </div>

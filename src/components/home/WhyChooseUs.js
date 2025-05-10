@@ -30,7 +30,7 @@ const WhyChooseUs = () => {
       <div className="container mx-auto px-6 md:px-8">
         <div className="flex flex-col lg:flex-row items-center">
           <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <img src="/images/placeholder/600/400" alt="Why Choose Us" className="rounded-lg shadow-lg" />
+            <img src="https://i.ibb.co/bRWCWmBm/Logo.png" alt="Why Choose Us" className="rounded-lg shadow-lg" />
           </div>
           
           <div className="lg:w-1/2 lg:pl-16">

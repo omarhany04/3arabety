@@ -7,21 +7,21 @@ const Testimonials = () => {
     {
       id: 1,
       text: "Their 24/7 roadside assistance saved me when my car broke down at midnight. The mechanic arrived within 20 minutes and got my car running again. Excellent service!",
-      name: "Sarah Johnson",
+      name: "Ahmed Yahia",
       role: "Toyota Camry Owner",
       rating: 5
     },
     {
       id: 2,
       text: "Used their inspection service before buying a used car. The detailed report helped me negotiate a better price and avoid a potential headache. Highly recommend for used car buyers!",
-      name: "Michael Rodriguez",
+      name: "Mohamed Amr",
       role: "BMW 3 Series Owner",
       rating: 4
     },
     {
       id: 3,
       text: "The convenience of their pickup and delivery service is unmatched. They collected my car from my workplace, serviced it, and returned it by the end of the day. Will definitely use again!",
-      name: "Emily Chen",
+      name: "Sara Ali",
       role: "Honda Civic Owner",
       rating: 5
     }

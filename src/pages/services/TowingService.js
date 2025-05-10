@@ -48,7 +48,7 @@ const TowingService = () => {
         
         <div className="flex flex-col lg:flex-row items-center mb-16">
           <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <img src="/images/placeholder/600/400" alt="Towing Service" className="rounded-lg shadow-lg" />
+            <img src="https://i.ibb.co/PZ6QWGkR/Towing.png" alt="Towing Service" className="rounded-lg shadow-lg" />
           </div>
           
           <div className="lg:w-1/2 lg:pl-16">
@@ -62,7 +62,7 @@ const TowingService = () => {
                 <AlertCircle className="h-5 w-5 text-yellow-600 mr-2" />
                 24/7 Towing Hotline
               </h4>
-              <div className="text-2xl font-bold text-yellow-600 mb-2">+1 (123) 456-7890</div>
+              <div className="text-2xl font-bold text-yellow-600 mb-2">(+20) 3 592 8472</div>
               <p className="text-gray-600 text-sm">
                 We're available around the clock for all your towing needs.
               </p>

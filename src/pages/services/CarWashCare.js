@@ -15,7 +15,7 @@ const CarWashCare = () => {
         
         <div className="flex flex-col lg:flex-row items-center mb-16">
           <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <img src="/images/placeholder/600/400" alt="Car Wash & Care" className="rounded-lg shadow-lg" />
+            <img src="https://i.ibb.co/7dFN19dh/CarWash.jpg" alt="Car Wash & Care" className="rounded-lg shadow-lg" />
           </div>
           
           <div className="lg:w-1/2 lg:pl-16">

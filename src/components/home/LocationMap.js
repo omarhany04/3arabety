@@ -20,35 +20,35 @@ const LocationMap = () => {
   const locations = [
     {
       id: 1,
-      name: '3arabety Service Center',
-      address: '123 Main Street, Downtown',
-      lat: 40.7128,
-      lng: -74.0060,
+      name: 'مركز الطارق لخدمات السيارات',
+      address: 'طريق الكورنيش، سيدي بشر، الإسكندرية',
+      lat: 31.2519,
+      lng: 29.9860,
       type: 'service',
-      rating: 4.5,
-      reviews: 47,
+      rating: 4.6,
+      reviews: 85,
       isOpen: true
     },
     {
       id: 2,
-      name: 'Premium Auto Parts',
-      address: '456 Park Avenue, Midtown',
-      lat: 40.7200,
-      lng: -73.9950,
+      name: 'أبو اليزيد لقطع غيار السيارات',
+      address: 'شارع الحرية، سموحة، الإسكندرية',
+      lat: 31.2146,
+      lng: 29.9442,
       type: 'parts',
-      rating: 4.0,
-      reviews: 32,
+      rating: 4.2,
+      reviews: 64,
       isOpen: true
     },
     {
       id: 3,
-      name: 'City Car Wash',
-      address: '789 Oak Street, Westside',
-      lat: 40.7050,
-      lng: -74.0150,
+      name: 'سبيد لغسيل السيارات',
+      address: 'شارع مصطفى كامل، رشدي، الإسكندرية',
+      lat: 31.2237,
+      lng: 29.9576,
       type: 'wash',
-      rating: 3.5,
-      reviews: 19,
+      rating: 4.0,
+      reviews: 40,
       isOpen: false
     }
   ];
@@ -128,11 +128,11 @@ const LocationMap = () => {
           
           {isMounted && (
             <div id="map" className="w-full h-96 rounded-lg overflow-hidden mb-6">
-              <MapContainer 
-                center={[40.7128, -74.0060]} 
-                zoom={13} 
-                style={{ height: '100%', width: '100%' }}
-              >
+            <MapContainer 
+              center={[31.2156, 29.9553]} // Centered on Alexandria
+              zoom={13}
+              style={{ height: '100%', width: '100%' }}
+            >
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

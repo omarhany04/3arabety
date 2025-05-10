@@ -12,36 +12,58 @@ const Locations = () => {
   const locations = [
     {
       id: 1,
-      name: '3arabety Service Center',
-      address: '123 Main Street, Downtown',
-      lat: 40.7128,
-      lng: -74.0060,
+      name: 'مركز صيانة عربيتك',
+      address: 'شارع مصطفى كامل، سموحة، الإسكندرية',
+      lat: 31.2156,
+      lng: 29.9553,
       type: 'service',
-      rating: 4.5,
-      reviews: 47,
+      rating: 4.6,
+      reviews: 65,
       isOpen: true
     },
     {
       id: 2,
-      name: 'Premium Auto Parts',
-      address: '456 Park Avenue, Midtown',
-      lat: 40.7200,
-      lng: -73.9950,
+      name: 'قطع غيار أوتو بلس',
+      address: 'شارع جمال عبد الناصر، ميامي، الإسكندرية',
+      lat: 31.2471,
+      lng: 29.9632,
       type: 'parts',
-      rating: 4.0,
-      reviews: 32,
-      isOpen: true
+      rating: 4.3,
+      reviews: 48,
+      isOpen: false
     },
     {
       id: 3,
-      name: 'City Car Wash',
-      address: '789 Oak Street, Westside',
-      lat: 40.7050,
-      lng: -74.0150,
+      name: 'كار ووش النزهة',
+      address: 'شارع النزهة، سيدي بشر، الإسكندرية',
+      lat: 31.2433,
+      lng: 29.9768,
       type: 'wash',
-      rating: 3.5,
-      reviews: 19,
-      isOpen: false
+      rating: 3.8,
+      reviews: 27,
+      isOpen: true
+    },
+    {
+      id: 4,
+      name: 'ونش إنقاذ الطريق',
+      address: 'الطريق الصحراوي، مدخل الإسكندرية',
+      lat: 31.0625,
+      lng: 29.7762,
+      type: 'towing',
+      rating: 4.1,
+      reviews: 15,
+      isOpen: true
+    },
+    {
+      id: 5,
+      name: 'خدمة الطريق السريع',
+      address: 'طريق إسكندرية القاهرة السريع، العامرية، الإسكندرية',
+      lat: 31.1057,
+      lng: 29.7695,
+      type: 'service',
+      rating: 4.4,
+      reviews: 32,
+      isOpen: true
     }
   ];
 
@@ -143,11 +165,11 @@ const Locations = () => {
           
           {isMounted && (
             <div className="h-96 w-full rounded-lg overflow-hidden mb-6">
-              <MapContainer 
-                center={[40.7128, -74.0060]} 
-                zoom={13} 
-                style={{ height: '100%', width: '100%' }}
-              >
+            <MapContainer 
+              center={[30.0444, 31.2357]} // Cairo coordinates
+              style={{ height: '100%', width: '100%' }}
+            >
+
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

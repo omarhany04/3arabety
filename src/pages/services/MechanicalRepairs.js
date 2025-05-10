@@ -48,7 +48,7 @@ const MechanicalRepairs = () => {
         
         <div className="flex flex-col lg:flex-row items-center mb-16">
           <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <img src="/images/placeholder/600/400" alt="Mechanical Repairs" className="rounded-lg shadow-lg" />
+            <img src="https://i.ibb.co/jkRKJpK3/Repair1.jpg" alt="Mechanical Repairs" className="rounded-lg shadow-lg" />
           </div>
           
           <div className="lg:w-1/2 lg:pl-16">
