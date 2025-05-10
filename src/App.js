@@ -15,11 +15,13 @@ import CarWashCare from './pages/services/CarWashCare';
 import Checkout from './pages/Checkout';
 import { CartProvider } from './context/CartContext';
 import Cart from './components/common/shop/Cart';
+import ScrollToTop from './components/common/ScrollToTop';
 
 function App() {
   return (
     <CartProvider>
       <BrowserRouter>
+      <ScrollToTop />
         <div className="font-poppins bg-gray-50 min-h-screen flex flex-col">
           <Header />
           <main className="flex-grow">

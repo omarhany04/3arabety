@@ -1,4 +1,6 @@
-import React from 'react';
+// src/pages/Home.js - Updated to support scrolling to services section
+import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import Hero from '../components/home/Hero';
 import SearchBar from '../components/home/SearchBar';
 import ServicesOverview from '../components/home/ServicesOverview';
@@ -47,11 +49,25 @@ const ContactCTA = () => {
 };
 
 const Home = () => {
+  const location = useLocation();
+  const servicesRef = useRef(null);
+
+  // Effect to handle scrolling when navigating to home with state
+  useEffect(() => {
+    if (location.state?.scrollToServices && servicesRef.current) {
+      setTimeout(() => {
+        servicesRef.current.scrollIntoView({ behavior: 'smooth' });
+      }, 100); // Small delay to ensure DOM is ready
+    }
+  }, [location.state]);
+
   return (
     <div>
       <Hero />
       <SearchBar />
-      <ServicesOverview />
+      <div ref={servicesRef} id="services-scroll-target">
+        <ServicesOverview />
+      </div>
       <WhyChooseUs />
       <ShopSection />
       <BrandsSection />
