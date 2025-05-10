@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Filter, Grid, List, ChevronDown, ChevronUp, Search } from 'react-feather';
+import { ShoppingCart, Filter, Grid, List, ChevronDown, ChevronUp, Search, Check } from 'react-feather';
 import BrandFilter from '../components/common/shop/BrandFilter';
 import { useCart } from '../context/CartContext';
 
@@ -17,6 +17,9 @@ const Shop = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = viewMode === 'list' ? 3 : 9;
+
+  // State for success message
+  const [addedProducts, setAddedProducts] = useState({});
 
 
   const allProducts = [
@@ -523,6 +526,20 @@ const Shop = () => {
   // Handle adding to cart
   const handleAddToCart = (product) => {
     addItem(product, 1, installationServices[product.id] || false);
+    
+    // Show success message for this specific product
+    setAddedProducts(prev => ({
+      ...prev,
+      [product.id]: true
+    }));
+    
+    // Hide message after 3 seconds
+    setTimeout(() => {
+      setAddedProducts(prev => ({
+        ...prev,
+        [product.id]: false
+      }));
+    }, 3000);
   };
 
   // Toggle brand filter
@@ -949,6 +966,12 @@ const Shop = () => {
                             <ShoppingCart className="h-5 w-5" />
                           </button>
                         </div>
+                        {/* Success message */}
+                        {addedProducts[product.id] && (
+                          <div className="mt-2 bg-green-100 text-green-700 p-2 rounded text-sm flex items-center justify-center animate-pulse">
+                            <Check className="h-4 w-4 mr-1" /> Added to cart!
+                          </div>
+                        )}
                         <div className="mt-3">
                           <label className="flex items-center text-sm text-gray-600">
                             <input 
@@ -1014,22 +1037,30 @@ const Shop = () => {
                               )}
                               <span className="text-2xl font-bold text-gray-900">{formatPrice(product.price)}</span>
                             </div>
-                            <div className="flex items-center space-x-4">
-                              <label className="flex items-center text-sm text-gray-600">
-                                <input 
-                                  type="checkbox" 
-                                  className="form-checkbox h-4 w-4 text-blue-600 mr-2"
-                                  checked={installationServices[product.id] || false}
-                                  onChange={() => toggleInstallation(product.id)}
-                                />
-                                Add installation
-                              </label>
-                              <button 
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition duration-300 flex items-center"
-                                onClick={() => handleAddToCart(product)}
-                              >
-                                <ShoppingCart className="h-5 w-5 mr-2" /> Add to Cart
-                              </button>
+                            <div className="flex flex-col items-end space-y-2">
+                              <div className="flex items-center space-x-4">
+                                <label className="flex items-center text-sm text-gray-600">
+                                  <input 
+                                    type="checkbox" 
+                                    className="form-checkbox h-4 w-4 text-blue-600 mr-2"
+                                    checked={installationServices[product.id] || false}
+                                    onChange={() => toggleInstallation(product.id)}
+                                  />
+                                  Add installation
+                                </label>
+                                <button 
+                                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition duration-300 flex items-center"
+                                  onClick={() => handleAddToCart(product)}
+                                >
+                                  <ShoppingCart className="h-5 w-5 mr-2" /> Add to Cart
+                                </button>
+                              </div>
+                              {/* Success message for list view */}
+                              {addedProducts[product.id] && (
+                                <div className="bg-green-100 text-green-700 px-3 py-1 rounded text-sm flex items-center animate-pulse">
+                                  <Check className="h-4 w-4 mr-1" /> Added to cart!
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
