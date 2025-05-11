@@ -104,10 +104,10 @@ const Navbar = () => {
                 Inspection Services
               </NavLink>
               <NavLink 
-                to="/services/spare-parts-supply" 
-                className={`block py-1 ${location.pathname === '/services/spare-parts-supply' ? 'text-blue-600' : 'text-gray-600'} hover:text-blue-600`}
+                to="/services/specialty-services" 
+                className={`block py-1 ${location.pathname === '/services/specialty-services' ? 'text-blue-600' : 'text-gray-600'} hover:text-blue-600`}
               >
-                Spare Parts Supply
+                Specialty Services
               </NavLink>
               <NavLink 
                 to="/services/towing-service" 

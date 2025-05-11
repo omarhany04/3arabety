@@ -155,7 +155,7 @@ const Header = () => {
               <NavLink to="/services/mechanical-repairs" className="block text-gray-600 hover:text-blue-600">Mechanical Repairs</NavLink>
               <NavLink to="/services/emergency-assistance" className="block text-gray-600 hover:text-blue-600">Emergency Assistance</NavLink>
               <NavLink to="/services/inspection-services" className="block text-gray-600 hover:text-blue-600">Inspection Services</NavLink>
-              <NavLink to="/services/spare-parts-supply" className="block text-gray-600 hover:text-blue-600">Spare Parts Supply</NavLink>
+              <NavLink to="/services/specialty-services" className="block text-gray-600 hover:text-blue-600">Specialty Services</NavLink>
               <NavLink to="/services/towing-service" className="block text-gray-600 hover:text-blue-600">Towing Service</NavLink>
               <NavLink to="/services/car-wash-care" className="block text-gray-600 hover:text-blue-600">Car Wash & Care</NavLink>
             </div>

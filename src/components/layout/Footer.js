@@ -139,7 +139,7 @@ const Footer = () => {
                 <Link to="/services/inspection-services" className="text-gray-400 hover:text-blue-400 transition duration-300">Inspection Services</Link>
               </li>
               <li>
-                <Link to="/services/spare-parts-supply" className="text-gray-400 hover:text-blue-400 transition duration-300">Spare Parts Supply</Link>
+                <Link to="/services/specialty-services" className="text-gray-400 hover:text-blue-400 transition duration-300">Specialty Services</Link>
               </li>
               <li>
                 <Link to="/services/towing-service" className="text-gray-400 hover:text-blue-400 transition duration-300">Towing Service</Link>

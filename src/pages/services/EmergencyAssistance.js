@@ -155,7 +155,7 @@ const EmergencyAssistance = () => {
                   When your vehicle can't be fixed roadside, we'll tow it to the nearest service center or your preferred location.
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                  From EGP 89.99
+                  From EGP 79.99
                 </p>
               </div>
             </div>

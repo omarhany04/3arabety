@@ -32,10 +32,10 @@ const ServicesOverview = () => {
     {
       id: 4,
       icon: <Package className="h-7 w-7 text-purple-600" />,
-      title: 'Spare Parts Supply',
-      description: 'Quality spare parts for all car types with options for professional installation or DIY purchase.',
+      title: 'Specialty Services',
+      description: 'Quality services for all car types with options for professional installation or DIY purchase.',
       color: 'purple',
-      link: '/services/spare-parts-supply'
+      link: '/services/specialty-services'
     },
     {
       id: 5,

@@ -221,7 +221,7 @@ const ContactForm = ({ onSubmit, className = '' }) => {
                       <option value="mechanical">Mechanical Repairs</option>
                       <option value="emergency">Emergency Assistance</option>
                       <option value="inspection">Inspection Services</option>
-                      <option value="parts">Spare Parts Supply</option>
+                      <option value="parts">Specialty Services</option>
                       <option value="towing">Towing Service</option>
                       <option value="carwash">Car Wash & Care</option>
                     </select>

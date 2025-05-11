@@ -6,7 +6,7 @@ const mockServices = [
   { id: 1, name: 'Mechanical Repairs', category: 'service', url: '/services/mechanical-repairs', icon: <Tool size={16} /> },
   { id: 2, name: 'Emergency Assistance', category: 'service', url: '/services/emergency-assistance', icon: <Tool size={16} /> },
   { id: 3, name: 'Inspection Services', category: 'service', url: '/services/inspection-services', icon: <Tool size={16} /> },
-  { id: 4, name: 'Spare Parts Supply', category: 'service', url: '/services/spare-parts-supply', icon: <Tool size={16} /> },
+  { id: 4, name: 'Specialty Services', category: 'service', url: '/services/specialty-services', icon: <Tool size={16} /> },
   { id: 5, name: 'Towing Service', category: 'service', url: '/services/towing-service', icon: <Tool size={16} /> },
   { id: 6, name: 'Car Wash & Care', category: 'service', url: '/services/car-wash-care', icon: <Tool size={16} /> },
 ];

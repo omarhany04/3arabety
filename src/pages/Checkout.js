@@ -664,7 +664,7 @@ const Checkout = () => {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">Free Shipping</p>
-                      <p>Orders over EGP 499 qualify for free shipping</p>
+                      <p>Orders over EGP 1499 qualify for free shipping</p>
                     </div>
                   </div>
                 </div>

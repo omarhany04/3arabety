@@ -8,7 +8,7 @@ import Locations from './pages/Locations';
 import MechanicalRepairs from './pages/services/MechanicalRepairs';
 import EmergencyAssistance from './pages/services/EmergencyAssistance';
 import InspectionServices from './pages/services/InspectionServices';
-import SparePartsSupply from './pages/services/SparePartsSupply';
+import SpecialtyServices from './pages/services/SpecialtyServices';
 import TowingService from './pages/services/TowingService';
 import CarWashCare from './pages/services/CarWashCare';
 import Checkout from './pages/Checkout';
@@ -35,7 +35,7 @@ function App() {
               <Route path="/services/mechanical-repairs" element={<MechanicalRepairs />} />
               <Route path="/services/emergency-assistance" element={<EmergencyAssistance />} />
               <Route path="/services/inspection-services" element={<InspectionServices />} />
-              <Route path="/services/spare-parts-supply" element={<SparePartsSupply />} />
+              <Route path="/services/specialty-services" element={<SpecialtyServices />} />
               <Route path="/services/towing-service" element={<TowingService />} />
               <Route path="/services/car-wash-care" element={<CarWashCare />} />
             </Routes>
