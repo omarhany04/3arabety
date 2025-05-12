@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { AlertCircle, Check, PhoneCall } from 'react-feather';
+import BookNowButton from '../../components/common/BookNowButton';
 
 const EmergencyAssistance = () => {
   return (
@@ -79,9 +79,13 @@ const EmergencyAssistance = () => {
               </div>
             </div>
             
-            <a href="tel:+11234567899" className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md font-medium transition duration-300 flex items-center">
+            <BookNowButton 
+              service="Emergency Assistance"
+              buttonText="Call for Emergency"
+              className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md font-medium transition duration-300 flex items-center"
+            >
               <PhoneCall className="h-5 w-5 mr-2" /> Call for Emergency
-            </a>
+            </BookNowButton>
           </div>
         </div>
         
@@ -99,11 +103,20 @@ const EmergencyAssistance = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Battery Jump-Start</h3>
                 <p className="text-gray-600 mb-4">
-                  Quickly get your vehicle started with our professional jump-start service. We'll also check your battery health to prevent future issues.
+                  Get a quick jump-start and a professional battery health check to avoid future problems.
                 </p>
-                <p className="text-lg font-bold text-gray-900">
-                  EGP 49.99
-                </p>
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-bold text-gray-900">
+                    EGP 49.99
+                  </p>
+                  <BookNowButton 
+                    service="Battery Jump-Start"
+                    price="EGP 49.99"
+                    duration="20-30 minutes"
+                    className="text-red-600 font-medium hover:text-red-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
@@ -119,9 +132,18 @@ const EmergencyAssistance = () => {
                 <p className="text-gray-600 mb-4">
                   We'll replace your flat tire with your spare or provide temporary repair to get you to a service center.
                 </p>
-                <p className="text-lg font-bold text-gray-900">
-                  EGP 59.99
-                </p>
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-bold text-gray-900">
+                    EGP 59.99
+                  </p>
+                  <BookNowButton 
+                    service="Flat Tire Service"
+                    price="EGP 59.99"
+                    duration="30-45 minutes"
+                    className="text-red-600 font-medium hover:text-red-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
@@ -136,9 +158,18 @@ const EmergencyAssistance = () => {
                 <p className="text-gray-600 mb-4">
                   Locked your keys in your car? Our technicians can safely unlock your vehicle without causing damage.
                 </p>
-                <p className="text-lg font-bold text-gray-900">
-                  EGP 69.99
-                </p>
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-bold text-gray-900">
+                    EGP 69.99
+                  </p>
+                  <BookNowButton 
+                    service="Lockout Assistance"
+                    price="EGP 69.99"
+                    duration="20-40 minutes"
+                    className="text-red-600 font-medium hover:text-red-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
@@ -152,11 +183,20 @@ const EmergencyAssistance = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Emergency Towing</h3>
                 <p className="text-gray-600 mb-4">
-                  When your vehicle can't be fixed roadside, we'll tow it to the nearest service center or your preferred location.
+                  If roadside repair isn't possible, we'll tow your vehicle to a nearby service center or your chosen location.
                 </p>
-                <p className="text-lg font-bold text-gray-900">
-                  From EGP 79.99
-                </p>
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-bold text-gray-900">
+                    From EGP 79.99
+                  </p>
+                  <BookNowButton 
+                    service="Emergency Towing"
+                    price="From EGP 79.99"
+                    duration="30-60 minutes"
+                    className="text-red-600 font-medium hover:text-red-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
@@ -171,9 +211,18 @@ const EmergencyAssistance = () => {
                 <p className="text-gray-600 mb-4">
                   Run out of gas? We'll deliver enough fuel to get you to the nearest gas station.
                 </p>
-                <p className="text-lg font-bold text-gray-900">
-                  EGP 49.99 + fuel cost
-                </p>
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-bold text-gray-900">
+                    EGP 49.99 + fuel cost
+                  </p>
+                  <BookNowButton 
+                    service="Fuel Delivery"
+                    price="EGP 49.99 + fuel cost"
+                    duration="30-45 minutes"
+                    className="text-red-600 font-medium hover:text-red-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
@@ -188,9 +237,18 @@ const EmergencyAssistance = () => {
                 <p className="text-gray-600 mb-4">
                   Our mobile mechanics can diagnose and often fix common issues right at your location.
                 </p>
-                <p className="text-lg font-bold text-gray-900">
-                  EGP 79.99
-                </p>
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-bold text-gray-900">
+                    EGP 79.99
+                  </p>
+                  <BookNowButton 
+                    service="On-Site Diagnostics"
+                    price="EGP 79.99"
+                    duration="30-60 minutes"
+                    className="text-red-600 font-medium hover:text-red-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -232,9 +290,12 @@ const EmergencyAssistance = () => {
                     <span>Fuel Delivery</span>
                   </li>
                 </ul>
-                <Link to="/contact" className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Sign Up
-                </Link>
+                <BookNowButton 
+                  service="Basic Plan - Emergency Assistance Membership"
+                  price="EGP 99/year"
+                  className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6"
+                  buttonText="Sign Up"
+                />
               </div>
             </div>
             
@@ -267,9 +328,12 @@ const EmergencyAssistance = () => {
                     <span className="text-gray-600">Lockout Assistance</span>
                   </li>
                 </ul>
-                <Link to="/contact" className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Sign Up
-                </Link>
+                <BookNowButton 
+                  service="Premium Plan - Emergency Assistance Membership"
+                  price="EGP 179/year"
+                  className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6"
+                  buttonText="Sign Up"
+                />
               </div>
             </div>
             
@@ -302,9 +366,12 @@ const EmergencyAssistance = () => {
                     <span className="text-gray-600">Covers Up to 3 Vehicles</span>
                   </li>
                 </ul>
-                <Link to="/contact" className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Sign Up
-                </Link>
+                <BookNowButton 
+                  service="Ultimate Plan - Emergency Assistance Membership"
+                  price="EGP 249/year"
+                  className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6"
+                  buttonText="Sign Up"
+                />
               </div>
             </div>
           </div>

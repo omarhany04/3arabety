@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Check, Plus, Minus, X } from 'react-feather';
+import BookNowButton from '../../components/common/BookNowButton';
 
 const MechanicalRepairs = () => {
   const [activeAccordion, setActiveAccordion] = useState(null);
@@ -107,157 +107,187 @@ const MechanicalRepairs = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h4 className="font-bold text-gray-900">Suspension & Steering Repairs</h4>
+                  <h4 className="font-bold text-gray-900">Electrical System Diagnostics</h4>
                   <p className="text-gray-600 text-sm">
-                    Diagnosis and repair of suspension and steering components for a smoother ride.
+                    Troubleshooting and repairs for all electrical issues, from batteries to complex computer systems.
                   </p>
                 </div>
               </div>
             </div>
             
-            <Link to="/contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium transition duration-300">
-              Schedule Service
-            </Link>
+            <BookNowButton 
+              service="General Mechanical Repairs" 
+              buttonText="Schedule Service"
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium transition duration-300"
+            />
           </div>
         </div>
         
-        {/* Pricing Section */}
+        {/* Service Packages */}
         <div className="mb-16">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Our Pricing</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Service Packages</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Basic Service Package */}
             <div className="pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-200">
               <div className="bg-blue-50 p-6 text-center border-b border-gray-200">
-                <h4 className="text-xl font-bold text-gray-900 mb-2">Basic Diagnostics</h4>
-                <div className="text-3xl font-bold text-blue-600 mb-2">EGP 49.99</div>
-                <p className="text-gray-600 text-sm">For basic mechanical issues</p>
+                <h4 className="text-xl font-bold text-gray-900 mb-2">Basic Service</h4>
+                <div className="text-3xl font-bold text-blue-600 mb-2">EGP 599.99</div>
+                <p className="text-gray-600 text-sm">Essential maintenance for all vehicles</p>
               </div>
               <div className="p-6">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Computer Diagnostics</span>
+                    <span className="text-gray-600">Oil and filter change</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Visual Inspection</span>
+                    <span className="text-gray-600">Fluid level check and top-up</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Performance Check</span>
+                    <span className="text-gray-600">Tire pressure check</span>
                   </li>
-                  <li className="flex items-center text-gray-400">
-                    <X className="h-4 w-4 text-red-400 mr-2" />
-                    <span>Advanced Testing</span>
+                  <li className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    <span className="text-gray-600">Brake inspection</span>
                   </li>
-                  <li className="flex items-center text-gray-400">
-                    <X className="h-4 w-4 text-red-400 mr-2" />
-                    <span>Repair Service</span>
+                  <li className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    <span className="text-gray-600">Battery check</span>
                   </li>
                 </ul>
-                <Link to="/contact" className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Book Now
-                </Link>
+                <div className="mt-6 text-center">
+                  <span className="text-sm text-gray-500">Duration: 1-2 hours</span>
+                </div>
+                <div className="flex justify-between items-center mt-6">
+                  <span className="text-lg font-bold text-gray-900">EGP 599.99</span>
+                  <BookNowButton 
+                    service="Basic Service Package"
+                    price="EGP 599.99"
+                    duration="1-2 hours"
+                    className="text-blue-600 font-medium hover:text-blue-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
+            {/* Comprehensive Service Package */}
             <div className="pricing-card bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 border-2 border-blue-600 transform scale-105">
               <div className="bg-blue-600 p-6 text-center">
-                <h4 className="text-xl font-bold text-white mb-2">Standard Service</h4>
-                <div className="text-3xl font-bold text-white mb-2">EGP 149.99</div>
-                <p className="text-blue-100 text-sm">For common mechanical repairs</p>
+                <h4 className="text-xl font-bold text-white mb-2">Comprehensive Service</h4>
+                <div className="text-3xl font-bold text-white mb-2">EGP 1,299.99</div>
+                <p className="text-blue-100 text-sm">Complete inspection and maintenance</p>
               </div>
               <div className="p-6">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Computer Diagnostics</span>
+                    <span className="text-gray-600">All Basic Service items</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Comprehensive Inspection</span>
+                    <span className="text-gray-600">Air filter replacement</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Performance Optimization</span>
+                    <span className="text-gray-600">Spark plug check/replacement</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Minor Repairs Included</span>
+                    <span className="text-gray-600">Multi-point inspection</span>
                   </li>
-                  <li className="flex items-center text-gray-400">
-                    <X className="h-4 w-4 text-red-400 mr-2" />
-                    <span>Major Component Repairs</span>
+                  <li className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    <span className="text-gray-600">Computer diagnostics scan</span>
                   </li>
                 </ul>
-                <Link to="/contact" className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Book Now
-                </Link>
+                <div className="mt-6 text-center">
+                  <span className="text-sm text-gray-500">Duration: 3-4 hours</span>
+                </div>
+                <div className="flex justify-between items-center mt-6">
+                  <span className="text-lg font-bold text-gray-900">EGP 1,299.99</span>
+                  <BookNowButton 
+                    service="Comprehensive Service Package"
+                    price="EGP 1,299.99"
+                    duration="3-4 hours"
+                    className="text-blue-600 font-medium hover:text-blue-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
+            {/* Premium Service Package */}
             <div className="pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-200">
               <div className="bg-blue-50 p-6 text-center border-b border-gray-200">
                 <h4 className="text-xl font-bold text-gray-900 mb-2">Premium Service</h4>
-                <div className="text-3xl font-bold text-blue-600 mb-2">EGP 299.99</div>
-                <p className="text-gray-600 text-sm">For complex mechanical issues</p>
+                <div className="text-3xl font-bold text-blue-600 mb-2">EGP 2,499.99</div>
+                <p className="text-gray-600 text-sm">Thorough overhaul for optimal performance</p>
               </div>
               <div className="p-6">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Advanced Diagnostics</span>
+                    <span className="text-gray-600">All Comprehensive Service items</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Complete System Inspection</span>
+                    <span className="text-gray-600">Transmission fluid change</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Performance Enhancement</span>
+                    <span className="text-gray-600">Cooling system flush</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">Minor & Medium Repairs</span>
+                    <span className="text-gray-600">Brake fluid flush</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-gray-600">90-Day Service Guarantee</span>
+                    <span className="text-gray-600">Fuel system cleaning</span>
                   </li>
                 </ul>
-                <Link to="/contact" className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Book Now
-                </Link>
+                <div className="mt-6 text-center">
+                  <span className="text-sm text-gray-500">Duration: 4-6 hours</span>
+                </div>
+                <div className="flex justify-between items-center mt-6">
+                  <span className="text-lg font-bold text-gray-900">EGP 2,499.99</span>
+                  <BookNowButton 
+                    service="Premium Service Package"
+                    price="EGP 2,499.99"
+                    duration="4-6 hours"
+                    className="text-blue-600 font-medium hover:text-blue-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
           </div>
-          
-          <p className="text-center text-gray-500 mt-8">
-            * Additional costs may apply based on specific vehicle make, model, and parts required.
-          </p>
         </div>
         
         {/* FAQ Section */}
         <div>
           <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h3>
           
-          <div className="space-y-4 max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto">
             {faqs.map((faq, index) => (
-              <div key={index} className="faq-item pb-4">
-                <div 
-                  className="faq-question flex justify-between items-center cursor-pointer"
+              <div key={index} className="border-b border-gray-200 last:border-b-0">
+                <button
+                  className="flex justify-between items-center w-full py-4 text-left"
                   onClick={() => toggleAccordion(index)}
                 >
                   <h4 className="font-bold text-gray-900">{faq.question}</h4>
-                  {activeAccordion === index ? 
-                    <Minus className="h-5 w-5 text-blue-600" /> : 
+                  {activeAccordion === index ? (
+                    <Minus className="h-5 w-5 text-blue-600" />
+                  ) : (
                     <Plus className="h-5 w-5 text-blue-600" />
-                  }
-                </div>
-                <div className={`mt-2 ${activeAccordion === index ? 'block' : 'hidden'}`}>
-                  <p className="text-gray-600">
-                    {faq.answer}
-                  </p>
+                  )}
+                </button>
+                <div className={`${activeAccordion === index ? 'faq-answer active' : 'faq-answer'}`}>
+                  <p className="text-gray-600 pb-4">{faq.answer}</p>
                 </div>
               </div>
             ))}

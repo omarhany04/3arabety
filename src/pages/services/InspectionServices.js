@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Check, CheckCircle } from 'react-feather';
+import BookNowButton from '../../components/common/BookNowButton';
 
 const InspectionServices = () => {
   return (
@@ -82,9 +82,11 @@ const InspectionServices = () => {
               </div>
             </div>
             
-            <Link to="/contact" className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-medium transition duration-300">
-              Schedule Inspection
-            </Link>
+            <BookNowButton 
+              service="Vehicle Inspection"
+              buttonText="Schedule Inspection"
+              className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-medium transition duration-300"
+            />
           </div>
         </div>
         
@@ -125,9 +127,13 @@ const InspectionServices = () => {
                 </ul>
                 <div className="flex justify-between items-center">
                   <span className="text-xl font-bold text-gray-900">EGP 149.99</span>
-                  <Link to="/contact" className="text-green-600 font-medium hover:text-green-800 transition duration-300">
-                    Book Now
-                  </Link>
+                  <BookNowButton 
+                    service="Pre-Purchase Inspection"
+                    price="EGP 149.99"
+                    duration="1-2 hours"
+                    className="text-green-600 font-medium hover:text-green-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
                 </div>
               </div>
             </div>
@@ -161,9 +167,13 @@ const InspectionServices = () => {
                 </ul>
                 <div className="flex justify-between items-center">
                   <span className="text-xl font-bold text-gray-900">EGP 129.99</span>
-                  <Link to="/contact" className="text-green-600 font-medium hover:text-green-800 transition duration-300">
-                    Book Now
-                  </Link>
+                  <BookNowButton 
+                    service="Pre-Sale Inspection"
+                    price="EGP 129.99"
+                    duration="1-2 hours"
+                    className="text-green-600 font-medium hover:text-green-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
                 </div>
               </div>
             </div>
@@ -197,9 +207,13 @@ const InspectionServices = () => {
                 </ul>
                 <div className="flex justify-between items-center">
                   <span className="text-xl font-bold text-gray-900">EGP 89.99</span>
-                  <Link to="/contact" className="text-green-600 font-medium hover:text-green-800 transition duration-300">
-                    Book Now
-                  </Link>
+                  <BookNowButton 
+                    service="Safety Inspection"
+                    price="EGP 89.99"
+                    duration="45-60 minutes"
+                    className="text-green-600 font-medium hover:text-green-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
                 </div>
               </div>
             </div>
@@ -213,9 +227,11 @@ const InspectionServices = () => {
                   Need something specific? We can create a custom inspection package tailored to your exact requirements.
                 </p>
               </div>
-              <Link to="/contact" className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-medium transition duration-300">
-                Request Custom Quote
-              </Link>
+              <BookNowButton 
+                service="Custom Inspection Package"
+                className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-medium transition duration-300"
+                buttonText="Request Custom Quote"
+              />
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Check, X } from 'react-feather';
+import BookNowButton from './BookNowButton';
 
 const PricingCard = ({ 
   plan, 
@@ -10,8 +10,7 @@ const PricingCard = ({
   nonFeatures = [], 
   isPopular = false, 
   duration = null,
-  buttonText = "Book Now",
-  buttonLink = "/contact"
+  buttonText = "Book Now"
 }) => {
   return (
     <div className={`pricing-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ${
@@ -54,14 +53,15 @@ const PricingCard = ({
             <span className="text-sm text-gray-500">Duration: {duration}</span>
           </div>
         )}
-        <Link 
-          to={buttonLink} 
+        <BookNowButton 
+          service={plan}
+          price={`EGP ${price}`}
+          duration={duration}
           className={`block w-full ${
             isPopular ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-600 hover:bg-blue-700'
           } text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6`}
-        >
-          {buttonText}
-        </Link>
+          buttonText={buttonText}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Check, X, Shield, Zap, Wind, TrendingUp, Droplet, Sun } from 'react-feather';
+import BookNowButton from '../../components/common/BookNowButton';
 
 const CarWashCare = () => {
   return (
@@ -82,9 +83,11 @@ const CarWashCare = () => {
               </div>
             </div>
             
-            <Link to="/contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium transition duration-300">
-              Book a Wash
-            </Link>
+            <BookNowButton 
+              service="Car Wash & Care"
+              buttonText="Book a Wash"
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium transition duration-300"
+            />
           </div>
         </div>
         
@@ -125,9 +128,16 @@ const CarWashCare = () => {
                 <div className="mt-6 text-center">
                   <span className="text-sm text-gray-500">Duration: 15-20 minutes</span>
                 </div>
-                <Link to="/contact" className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Book Now
-                </Link>
+                <div className="flex justify-between items-center mt-6">
+                  <span className="text-lg font-bold text-gray-900">EGP 19.99</span>
+                  <BookNowButton 
+                    service="Express Wash"
+                    price="EGP 19.99"
+                    duration="15-20 minutes"
+                    className="text-blue-600 font-medium hover:text-blue-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
@@ -163,9 +173,16 @@ const CarWashCare = () => {
                 <div className="mt-6 text-center">
                   <span className="text-sm text-gray-500">Duration: 45-60 minutes</span>
                 </div>
-                <Link to="/contact" className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Book Now
-                </Link>
+                <div className="flex justify-between items-center mt-6">
+                  <span className="text-lg font-bold text-gray-900">EGP 49.99</span>
+                  <BookNowButton 
+                    service="Deluxe Wash"
+                    price="EGP 49.99"
+                    duration="45-60 minutes"
+                    className="text-blue-600 font-medium hover:text-blue-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
             
@@ -201,9 +218,16 @@ const CarWashCare = () => {
                 <div className="mt-6 text-center">
                   <span className="text-sm text-gray-500">Duration: 2-3 hours</span>
                 </div>
-                <Link to="/contact" className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center px-6 py-3 rounded-md font-medium transition duration-300 mt-6">
-                  Book Now
-                </Link>
+                <div className="flex justify-between items-center mt-6">
+                  <span className="text-lg font-bold text-gray-900">EGP 129.99</span>
+                  <BookNowButton 
+                    service="Premium Detail"
+                    price="EGP 129.99"
+                    duration="2-3 hours"
+                    className="text-blue-600 font-medium hover:text-blue-800 transition duration-300"
+                    buttonText="Book Now"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -220,7 +244,7 @@ const CarWashCare = () => {
             </div>
             <Link 
               to="/services/specialty-services" 
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium transition duration-300 whitespace-nowrap"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium transition duration-300 whitespace-nowrap inline-block"
             >
               Explore Specialty Services
             </Link>
@@ -256,9 +280,11 @@ const CarWashCare = () => {
                     10% discount on all additional services
                   </li>
                 </ul>
-                <Link to="/contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition duration-300">
-                  Join Now
-                </Link>
+                <BookNowButton 
+                  service="Unlimited Wash Club Membership"
+                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition duration-300"
+                  buttonText="Join Now"
+                />
               </div>
               <div className="md:w-1/2">
                 <img src="https://i.ibb.co/LXZdk2cf/WashClub.jpg" alt="Wash Club Membership" className="rounded-lg shadow-md" />
