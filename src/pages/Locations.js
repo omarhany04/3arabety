@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { Filter, MapPin, Phone, Clock, Star } from 'react-feather';
+import { Filter, MapPin, Phone, Clock, Star, ChevronDown, ChevronUp } from 'react-feather';
 import L from 'leaflet';
 
 // Simple circular red dot icon
@@ -40,6 +40,8 @@ const Locations = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [mapCenter, setMapCenter] = useState([31.2001, 29.9187]); // Alexandria coordinates
   const [mapZoom, setMapZoom] = useState(12);
+  const [showAllLocations, setShowAllLocations] = useState(false);
+  const [locationsPerPage, setLocationsPerPage] = useState(9);
 
   // Sample location data (combined with the new locations)
   const locations = [
@@ -168,8 +170,219 @@ const Locations = () => {
       phone: '(+20) 12 3456 7898',
       hours: '8:00 AM - 8:00 PM',
       services: ['German Car Specialist', 'Computer Diagnostics', 'Performance Tuning', 'Transmission Repair']
+    },
+    // NEW LOCATIONS ADDED
+    {
+      id: 10,
+      name: 'مركز الإتحاد للإطارات',
+      address: 'شارع الإسكندر الأكبر، أزاريطة، الإسكندرية',
+      lat: 31.2039, 
+      lng: 29.9156,
+      type: 'parts',
+      rating: 4.7,
+      reviews: 92,
+      isOpen: true,
+      phone: '(+20) 12 3456 8001',
+      hours: '8:00 AM - 9:00 PM',
+      services: ['Tire Sales', 'Wheel Alignment', 'Balancing', 'Tire Repair']
+    },
+    {
+      id: 11,
+      name: 'ورشة النور للسيارات',
+      address: 'شارع فوزي معاذ، محرم بك، الإسكندرية',
+      lat: 31.1932,
+      lng: 29.9110,
+      type: 'service',
+      rating: 4.3,
+      reviews: 58,
+      isOpen: true,
+      phone: '(+20) 12 3456 8002',
+      hours: '8:30 AM - 8:30 PM',
+      services: ['General Repair', 'Suspension Work', 'Transmission Repair']
+    },
+    {
+      id: 12,
+      name: 'الزهور لتلميع السيارات',
+      address: 'شارع العيسوي، فلمنج، الإسكندرية',
+      lat: 31.2332,
+      lng: 29.9482,
+      type: 'wash',
+      rating: 4.5,
+      reviews: 73,
+      isOpen: true,
+      phone: '(+20) 12 3456 8003',
+      hours: '9:00 AM - 10:00 PM',
+      services: ['Premium Detailing', 'Exterior Polishing', 'Interior Steam Cleaning']
+    },
+    {
+      id: 13,
+      name: 'توفيق لقطع غيار الكوري',
+      address: 'شارع السلطان حسين، محطة الرمل، الإسكندرية',
+      lat: 31.1997,
+      lng: 29.8993,
+      type: 'parts',
+      rating: 4.1,
+      reviews: 47,
+      isOpen: true,
+      phone: '(+20) 12 3456 8004',
+      hours: '9:00 AM - 9:00 PM',
+      services: ['Korean Car Parts', 'Japanese Car Parts', 'Electronics']
+    },
+    {
+      id: 14,
+      name: 'سامي للسحب والإنقاذ',
+      address: 'الطريق الدائري، العجمي، الإسكندرية',
+      lat: 31.1571,
+      lng: 29.8035,
+      type: 'towing',
+      rating: 4.3,
+      reviews: 29,
+      isOpen: true,
+      phone: '(+20) 12 3456 8005',
+      hours: '24/7 Service',
+      services: ['Heavy Duty Towing', 'Roadside Assistance', 'Car Transport']
+    },
+    {
+      id: 15,
+      name: 'مركز الأصيل للزيوت والفلاتر',
+      address: 'شارع 45، العصافرة، الإسكندرية',
+      lat: 31.2650,
+      lng: 29.9812,
+      type: 'service',
+      rating: 4.4,
+      reviews: 83,
+      isOpen: true,
+      phone: '(+20) 12 3456 8006',
+      hours: '8:00 AM - 9:00 PM',
+      services: ['Oil Change', 'Filter Replacement', 'Fluids Check']
+    },
+    {
+      id: 16,
+      name: 'البدر لزينة السيارات',
+      address: 'شارع اسكندر إبراهيم، سابا باشا، الإسكندرية',
+      lat: 31.2226,
+      lng: 29.9402,
+      type: 'parts',
+      rating: 3.9,
+      reviews: 41,
+      isOpen: false,
+      phone: '(+20) 12 3456 8007',
+      hours: '10:00 AM - 10:00 PM',
+      services: ['Car Accessories', 'Window Tinting', 'LED Lighting']
+    },
+    {
+      id: 17,
+      name: 'الساحل للسمكرة والدهان',
+      address: 'المعمورة البلد، المنتزه، الإسكندرية',
+      lat: 31.2823,
+      lng: 30.0285,
+      type: 'service',
+      rating: 4.7,
+      reviews: 95,
+      isOpen: true,
+      phone: '(+20) 12 3456 8008',
+      hours: '9:00 AM - 7:00 PM',
+      services: ['Body Work', 'Professional Painting', 'Dent Removal']
+    },
+    {
+      id: 18,
+      name: 'غسيل متنقل الشاطبي',
+      address: 'شارع بور سعيد، الشاطبي، الإسكندرية',
+      lat: 31.2117,
+      lng: 29.9182,
+      type: 'wash',
+      rating: 3.8,
+      reviews: 36,
+      isOpen: true,
+      phone: '(+20) 12 3456 8009',
+      hours: '8:00 AM - 8:00 PM',
+      services: ['Mobile Car Wash', 'Steam Cleaning', 'Subscription Service']
+    },
+    {
+      id: 19,
+      name: 'مركز تكنو لبرمجة السيارات',
+      address: 'شارع جميلة بوحريد، جليم، الإسكندرية',
+      lat: 31.2324,
+      lng: 29.9666,
+      type: 'service',
+      rating: 4.9,
+      reviews: 107,
+      isOpen: true,
+      phone: '(+20) 12 3456 8010',
+      hours: '10:00 AM - 7:00 PM',
+      services: ['ECU Programming', 'Diagnostics', 'Performance Tuning']
+    },
+    {
+      id: 20,
+      name: 'البرنس لقطع غيار الأمريكي',
+      address: 'شارع الأقبال، لوران، الإسكندرية',
+      lat: 31.2437,
+      lng: 29.9702,
+      type: 'parts',
+      rating: 4.5,
+      reviews: 67,
+      isOpen: true,
+      phone: '(+20) 12 3456 8011',
+      hours: '9:00 AM - 8:00 PM',
+      services: ['American Car Parts', 'Accessories', 'Performance Parts']
+    },
+    {
+      id: 21,
+      name: 'مركز خدمة متنقل 24',
+      address: 'طريق برج العرب، العامرية، الإسكندرية',
+      lat: 31.0158,
+      lng: 29.7689,
+      type: 'service',
+      rating: 4.2,
+      reviews: 31,
+      isOpen: true,
+      phone: '(+20) 12 3456 8012',
+      hours: '24/7 Service',
+      services: ['Mobile Repair', 'Jump Start', 'Tire Change', 'Fuel Delivery']
+    },
+    {
+      id: 22,
+      name: 'الإتقان لصيانة المكيفات',
+      address: 'شارع أبو قير، الإبراهيمية، الإسكندرية',
+      lat: 31.2181,
+      lng: 29.9341,
+      type: 'service',
+      rating: 4.6,
+      reviews: 87,
+      isOpen: true,
+      phone: '(+20) 12 3456 8013',
+      hours: '9:00 AM - 8:00 PM',
+      services: ['AC Repair', 'AC Recharge', 'Heater Service']
+    },
+    {
+      id: 23,
+      name: 'الفرعونية للإطارات المستوردة',
+      address: 'شارع الشهيد مصطفى يسري، الحضرة، الإسكندرية',
+      lat: 31.1876,
+      lng: 29.9105,
+      type: 'parts',
+      rating: 4.4,
+      reviews: 59,
+      isOpen: true,
+      phone: '(+20) 12 3456 8014',
+      hours: '9:00 AM - 9:00 PM',
+      services: ['Imported Tires', 'Rims', 'Wheel Alignment']
+    },
+    {
+      id: 24,
+      name: 'الكوثر لخدمات السيارات',
+      address: 'شارع ملك حفني، المندرة، الإسكندرية',
+      lat: 31.2597,
+      lng: 29.9877,
+      type: 'service',
+      rating: 4.3,
+      reviews: 72,
+      isOpen: true,
+      phone: '(+20) 12 3456 8015',
+      hours: '8:30 AM - 8:30 PM',
+      services: ['General Maintenance', 'Brake Service', 'Suspension']
     }
-    ];
+  ];
 
   // Selected location for detailed view
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -198,6 +411,11 @@ const Locations = () => {
     return true;
   });
 
+  // Locations to display (either all or limited)
+  const displayedLocations = showAllLocations 
+    ? filteredLocations 
+    : filteredLocations.slice(0, locationsPerPage);
+
   // Center map on selected location
   const handleLocationSelect = (location) => {
     setSelectedLocation(location);
@@ -210,6 +428,18 @@ const Locations = () => {
     setSelectedLocation(null);
     setMapCenter([31.2001, 29.9187]); // Alexandria center
     setMapZoom(12);
+  };
+
+  // Handle view all locations toggle
+  const toggleViewAllLocations = () => {
+    setShowAllLocations(!showAllLocations);
+    
+    // If showing all locations, zoom out to fit all
+    if (!showAllLocations) {
+      setSelectedLocation(null);
+      setMapCenter([31.2001, 29.9187]); // Alexandria center
+      setMapZoom(11); // Zoom out to see more locations
+    }
   };
 
   // Initialize map after component mounts (for client-side rendering)
@@ -465,7 +695,7 @@ const Locations = () => {
                   
                   <div className="space-y-2">
                     {filteredLocations.length > 0 ? (
-                      filteredLocations.slice(0, 5).map(location => (
+                      filteredLocations.slice(0, 3).map(location => (
                         <button
                           key={location.id}
                           onClick={() => handleLocationSelect(location)}
@@ -500,9 +730,9 @@ const Locations = () => {
                     )}
                   </div>
                   
-                  {filteredLocations.length > 5 && (
+                  {filteredLocations.length > 3 && (
                     <p className="text-right mt-3 text-sm text-gray-500">
-                      Showing 5 of {filteredLocations.length} results
+                      Showing 3 of {filteredLocations.length} results
                     </p>
                   )}
                 </div>
@@ -511,9 +741,26 @@ const Locations = () => {
           </div>
           
           {/* Location Cards Grid */}
-          <h3 className="text-xl font-bold text-gray-900 mt-10 mb-6">All Locations</h3>
+          <div className="flex justify-between items-center mt-10 mb-6">
+            <h3 className="text-xl font-bold text-gray-900">Service Locations</h3>
+            <button 
+              onClick={toggleViewAllLocations}
+              className="flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-200"
+            >
+              {showAllLocations ? (
+                <>
+                  <ChevronUp className="h-5 w-5 mr-1" /> Show Less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-5 w-5 mr-1" /> View All ({filteredLocations.length})
+                </>
+              )}
+            </button>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredLocations.map(location => (
+            {displayedLocations.map(location => (
               <div 
                 key={location.id} 
                 className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition duration-200 cursor-pointer border-l-4 border-blue-600"
