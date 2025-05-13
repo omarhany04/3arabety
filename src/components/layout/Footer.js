@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  Activity, Facebook, Twitter, Instagram, Youtube, 
+  Facebook, Twitter, Instagram, Youtube, 
   MapPin, Phone, Mail, Clock, Headphones, MessageCircle
 } from 'react-feather';
-
+import { FaCarSide } from 'react-icons/fa';
 const Footer = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Footer = () => {
           <div className="lg:col-span-2 flex flex-col justify-start">
             <div className="mb-6">
               <Link to="/" className="flex items-center">
-                <span className="text-blue-400"><Activity className="h-8 w-8" /></span>
+                <span className="text-blue-500"><FaCarSide className="h-8 w-8" /></span>
                 <span className="ml-2 text-2xl font-bold">3arabety</span>
               </Link>
             </div>

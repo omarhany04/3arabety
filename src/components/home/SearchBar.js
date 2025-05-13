@@ -1,15 +1,54 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Search, ChevronDown } from 'react-feather';
 
 const SearchBar = () => {
   const [serviceType, setServiceType] = useState('');
   const [carBrand, setCarBrand] = useState('');
   const [location, setLocation] = useState('');
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Implement search functionality
-    console.log('Search parameters:', { serviceType, carBrand, location });
+    
+    // Create search query string
+    const queryParams = new URLSearchParams();
+    
+    // Use the location as the primary search term if provided
+    // otherwise use a combination of service and brand
+    let mainSearchTerm = location;
+    
+    if (!mainSearchTerm && serviceType) {
+      mainSearchTerm = serviceType;
+    }
+    
+    if (!mainSearchTerm && carBrand) {
+      mainSearchTerm = carBrand;
+    }
+    
+    // If no specific inputs, use a default search term that will show all results
+    if (!mainSearchTerm) {
+      mainSearchTerm = "all services";
+    }
+    
+    // Add the main search query
+    queryParams.append('query', mainSearchTerm);
+    
+    // Add the filter parameters separately
+    if (serviceType) {
+      queryParams.append('service', serviceType);
+    }
+    
+    if (carBrand) {
+      queryParams.append('brand', carBrand);
+    }
+    
+    if (location) {
+      queryParams.append('location', location);
+    }
+    
+    // Navigate to search results page with query parameters
+    navigate(`/search?${queryParams.toString()}`);
   };
 
   return (
