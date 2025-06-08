@@ -16,7 +16,7 @@ const SpecialtyServices = () => {
         
         <div className="flex flex-col lg:flex-row items-center mb-16">
           <div className="lg:w-1/2 mb-10 lg:mb-0">
-            <img src="https://i.ibb.co/7dFN19dh/SpecialtyServices.jpg" alt="Specialty Services" className="rounded-lg shadow-lg" />
+            <img src="https://i.ibb.co/XZpJSYzZ/Specialty-Services.jpg" alt="Specialty Services" className="rounded-lg shadow-lg" />
           </div>
           
           <div className="lg:w-1/2 lg:pl-16">
@@ -87,7 +87,7 @@ const SpecialtyServices = () => {
               <div className="relative">
                 <img src="https://i.ibb.co/h1rKCyxF/Ceramic-Coating.jpg" alt="Ceramic Coating" className="w-full h-48 object-cover" />
                 <div className="absolute top-2 right-2">
-                  <span className="bg-cyan-600 text-white text-xs px-2 py-1 rounded-md">Premium</span>
+                  <span className="bg-cyan-600 text-white text-xs px-2 py-1 rounded-md">Signature</span>
                 </div>
               </div>
               <div className="p-6">
@@ -147,7 +147,7 @@ const SpecialtyServices = () => {
               <div className="relative">
                 <img src="https://i.ibb.co/rf5vCpJc/Paint-Protection-Film.jpg" alt="Performance Tuning" className="w-full h-48 object-cover" />
                 <div className="absolute top-2 right-2">
-                  <span className="bg-yellow-600 text-white text-xs px-2 py-1 rounded-md">High Accuracy</span>
+                  <span className="bg-yellow-600 text-white text-xs px-2 py-1 rounded-md">Premier</span>
                 </div>
               </div>
               <div className="p-6">
@@ -209,7 +209,7 @@ const SpecialtyServices = () => {
               <div className="relative">
                 <img src="https://i.ibb.co/fG2ZPnmm/Window-Tinting.jpg" alt="Window Tinting" className="w-full h-48 object-cover" />
                 <div className="absolute top-2 right-2">
-                  <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-md">Best Seller</span>
+                  <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-md">Exclusive</span>
                 </div>
               </div>
               <div className="p-6">
@@ -241,7 +241,7 @@ const SpecialtyServices = () => {
               <div className="relative">
                 <img src="https://i.ibb.co/TBNmFSpD/ECUTuning.jpg" alt="ECU Tuning" className="w-full h-48 object-cover" />
                 <div className="absolute top-2 right-2">
-                  <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-md">Premium</span>
+                  <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-md">Certified</span>
                 </div>
               </div>
               <div className="p-6">
