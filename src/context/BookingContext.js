@@ -1,52 +1,36 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import BookingModal from '../components/common/BookingModal';
 
-// Create context
-const BookingContext = createContext();
+const BookingContext = createContext(undefined);
 
 export const BookingProvider = ({ children }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingDetails, setBookingDetails] = useState({
-    service: '',
-    price: '',
-    duration: ''
-  });
+  // `booking` is null while the modal is closed; a fresh modal (and form state) is mounted on every open
+  const [booking, setBooking] = useState(null);
 
-  // Function to open booking modal with service details
-  const openBookingModal = (service, price, duration) => {
-    setBookingDetails({
-      service,
-      price,
-      duration
-    });
-    setIsModalOpen(true);
-  };
+  const openBookingModal = useCallback((service, price, duration) => {
+    setBooking({ service, price, duration, id: Date.now() });
+  }, []);
 
-  // Function to close booking modal
-  const closeBookingModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeBookingModal = useCallback(() => setBooking(null), []);
+
+  const value = useMemo(() => ({ openBookingModal, closeBookingModal }), [openBookingModal, closeBookingModal]);
 
   return (
-    <BookingContext.Provider
-      value={{
-        openBookingModal,
-        closeBookingModal
-      }}
-    >
+    <BookingContext.Provider value={value}>
       {children}
-      <BookingModal 
-        isOpen={isModalOpen}
-        onClose={closeBookingModal}
-        service={bookingDetails.service}
-        price={bookingDetails.price}
-        duration={bookingDetails.duration}
-      />
+      {booking && (
+        <BookingModal
+          key={booking.id}
+          onClose={closeBookingModal}
+          service={booking.service}
+          price={booking.price}
+          duration={booking.duration}
+        />
+      )}
     </BookingContext.Provider>
   );
 };
 
-// Custom hook to use booking context
 export const useBooking = () => {
   const context = useContext(BookingContext);
   if (context === undefined) {

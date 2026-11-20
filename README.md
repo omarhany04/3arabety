@@ -1,16 +1,23 @@
 # 3arabety - Car Service & Parts Marketplace
 
-![3arabety Logo](https://i.ibb.co/bRWCWmBm/Logo.png)
+![3arabety Logo](public/Logo.png)
 
 ## Overview
 
-3arabety (which means "My Car" in Arabic) is a comprehensive car service platform and parts marketplace built with React. The platform connects car owners with a wide range of automotive services including mechanical repairs, emergency assistance, car wash services, and a shop for purchasing car parts and accessories.
+3arabety (عربيتي - "My Car" in Egyptian Arabic) is a bilingual (Arabic / English) car service platform and parts marketplace built with React. It connects car owners with a wide range of automotive services including mechanical repairs, emergency assistance, inspections, towing, car wash and specialty services, plus an online shop for parts and accessories.
 
 ## 🔗 Live Demo
+
 Check out the live demo of 3arabety:
 https://3arabety.vercel.app/
 
 ## 🚗 Features
+
+- **Arabic & English**
+  - Arabic (right-to-left) is the default language on the first visit
+  - One-click language switch in the header; the choice is remembered
+  - Full RTL layout, Arabic plural rules and localized prices (`ج.م` / `EGP`)
+  - Search works with Arabic or English keywords on every page
 
 - **Multiple Service Categories**
   - Mechanical Repairs
@@ -21,110 +28,77 @@ https://3arabety.vercel.app/
   - Car Wash & Care
 
 - **Online Shop**
-  - Extensive catalog of car parts and accessories
-  - Advanced filtering by category, brand, price range
-  - Shopping cart functionality with installation options
-  - Checkout process
+  - 55 products across 13 categories
+  - Filtering by category, car brand and price range, with sorting and grid/list views
+  - Shopping cart with optional installation service and VAT calculation
+  - Multi-step checkout
 
 - **Service Booking System**
-  - Interactive booking forms
-  - Service package selection
+  - Booking modal on every service and package
   - Date and time scheduling
 
 - **Location Finder**
-  - Interactive map with service center locations
-  - Detailed information for each location
-  - Filtering by service type, distance, and ratings
+  - Interactive map of service centers in Alexandria
+  - Live "open now" status (Cairo time), filters by type, distance and rating
+  - Directions via Google Maps
 
-- **User Interface**
-  - Responsive design for all devices
-  - Modern, clean aesthetic with Tailwind CSS
-  - Intuitive navigation
+- **Performance**
+  - All images are bundled with the site as optimized WebP (no hot-linking to third-party hosts)
+  - Self-hosted fonts (Poppins + Cairo), lazy-loaded images and route-level code splitting
 
 ## 🛠️ Tech Stack
 
-- **Frontend Framework**: React 
-- **Routing**: React Router 
-- **Styling**: Tailwind CSS 
+- **Frontend Framework**: React
+- **Routing**: React Router
+- **Styling**: Tailwind CSS (logical properties for RTL support)
+- **Internationalization**: lightweight built-in i18n layer (`src/i18n`)
 - **Icons**: React Feather, React Icons
 - **Maps**: Leaflet with React Leaflet
 - **State Management**: React Context API
-- **Animation**: CSS transitions and animations
 
 ## 📋 Project Structure
 
 ```
-Directory structure:
-└── ├── README.md
-    ├── package.json
-    ├── postcss.config.js
-    ├── tailwind.config.js
-    ├── public/
-    │   ├── index.html
-    │   ├── manifest.json
-    │   └── robots.txt
-    └── src/
-        ├── App.css
-        ├── App.js
-        ├── App.test.js
-        ├── index.css
-        ├── index.js
-        ├── reportWebVitals.js
-        ├── setupTests.js
-        ├── components/
-        │   ├── common/
-        │   │   ├── BookingModal.js
-        │   │   ├── BookNowButton.js
-        │   │   ├── ContactForm.js
-        │   │   ├── FAQItem.js
-        │   │   ├── ModernSearch.js
-        │   │   ├── PricingCard.js
-        │   │   ├── ProductCard.js
-        │   │   ├── ScrollToTop.js
-        │   │   ├── ServiceCard.js
-        │   │   └── shop/
-        │   │       ├── BrandFilter.js
-        │   │       ├── Cart.js
-        │   │       └── CartButton.js
-        │   ├── home/
-        │   │   ├── BrandsSection.js
-        │   │   ├── ContactSection.js
-        │   │   ├── Hero.js
-        │   │   ├── SearchBar.js
-        │   │   ├── ServicesOverview.js
-        │   │   ├── ShopSection.js
-        │   │   ├── Testimonials.js
-        │   │   └── WhyChooseUs.js
-        │   └── layout/
-        │       ├── Footer.js
-        │       ├── Header.js
-        │       └── Navbar.js
-        ├── context/
-        │   ├── BookingContext.js
-        │   └── CartContext.js
-        └── pages/
-            ├── Checkout.js
-            ├── Contact.js
-            ├── Home.js
-            ├── Locations.js
-            ├── SearchResults.js
-            ├── Shop.js
-            └── services/
-                ├── CarWashCare.js
-                ├── EmergencyAssistance.js
-                ├── InspectionServices.js
-                ├── MechanicalRepairs.js
-                ├── SpecialtyServices.js
-                └── TowingService.js
-
+src/
+├── App.js                  # Routes (pages are lazy-loaded)
+├── index.js                # Entry point, fonts and i18n provider
+├── assets/images/          # Optimized WebP photos and SVG brand logos
+├── components/
+│   ├── common/             # Shared UI (ProductCard, BookingModal, search, cart...)
+│   ├── home/               # Home page sections
+│   ├── layout/             # Header and Footer
+│   └── services/           # Building blocks shared by the service pages
+├── context/                # Cart and booking state
+├── data/                   # Products, services and locations
+├── hooks/                  # Reusable hooks
+├── i18n/
+│   ├── index.js            # I18nProvider, useTranslation(), formatting helpers
+│   └── locales/{ar,en}/    # Translations
+├── pages/                  # Route pages (shop, checkout, locations, services...)
+└── utils/                  # Bilingual search helpers
 ```
+
+## 🌍 Translations
+
+All user-facing text lives in `src/i18n/locales/ar` and `src/i18n/locales/en`. Inside a component:
+
+```jsx
+import { useTranslation } from '../i18n';
+
+const Example = () => {
+  const { t, formatPrice, language } = useTranslation();
+  return <p>{t('shop.title')} - {formatPrice(1299.99)}</p>;
+};
+```
+
+To add a product, add an entry to `src/data/products.js` (with its image in `src/assets/images/products`) and its name/description under `products` in both locale files.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v16+)
-- npm or yarn
+- Node.js (v18+)
+- npm
 
 ### Installation
 
@@ -137,19 +111,20 @@ Directory structure:
 2. Install dependencies:
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 3. Start the development server:
    ```bash
    npm start
-   # or
-   yarn start
    ```
 
 4. Open your browser and navigate to `http://localhost:3000`
 
+### Scripts
+
+- `npm start` - development server
+- `npm test` - run the test suite
+- `npm run build` - production build in `build/`
 
 ## 🔄 Workflow
 
@@ -174,12 +149,14 @@ Directory structure:
 - Mobile application
 - Loyalty program
 - Review and rating system
-- Multi-language support
 
 ## 📄 Acknowledgements
 
-- [React](https://reactjs.org/)
+- [React](https://react.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [React Router](https://reactrouter.com/)
-- [Leaflet](https://leafletjs.com/)
+- [Leaflet](https://leafletjs.com/) and [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors
 - [React Feather Icons](https://github.com/feathericons/react-feather)
+- Product and service photos: [Unsplash](https://unsplash.com/license) contributors
+- Car brand marks: [Simple Icons](https://simpleicons.org/) (CC0). All trademarks belong to their respective owners.
+- Fonts: [Poppins](https://fonts.google.com/specimen/Poppins) and [Cairo](https://fonts.google.com/specimen/Cairo) (SIL Open Font License), self-hosted via Fontsource

@@ -1,370 +1,279 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { X, Calendar, Clock, CheckCircle } from 'react-feather';
+import { useTranslation } from '../../i18n';
 
-const BookingModal = ({ isOpen, onClose, service, price, duration }) => {
+const TIME_SLOTS = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+
+const localDateString = (date = new Date()) => {
+  const offset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() - offset).toISOString().split('T')[0];
+};
+
+const inputClass = (hasError) =>
+  `block w-full bg-gray-50 border ${hasError ? 'border-red-500' : 'border-gray-300'} rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`;
+
+const BookingModal = ({ onClose, service, price, duration }) => {
+  const { t, locale } = useTranslation();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    vehicle: '',
-    date: '',
-    time: '',
-    notes: '',
-    service: service || 'General Service'
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', vehicle: '', date: '', time: '', notes: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const closeTimer = useRef(null);
+  const dialogRef = useRef(null);
 
-  // Update service if it changes from props
+  const serviceName = service || t('booking.generalService');
+
+  // Escape closes the dialog; the page behind it does not scroll
   useEffect(() => {
-    if (service) {
-      setFormData(prevData => ({ ...prevData, service }));
-    }
-  }, [service]);
+    const onKeyDown = (event) => event.key === 'Escape' && onClose();
+    document.addEventListener('keydown', onKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialogRef.current?.focus();
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      clearTimeout(closeTimer.current);
+    };
+  }, [onClose]);
 
-  // Available time slots
-  const timeSlots = [
-    '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', 
-    '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', 
-    '05:00 PM', '06:00 PM'
-  ];
-
-  // Handle form input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-    
-    // Clear error for this field as the user types
-    if (errors[name]) {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        [name]: undefined
-      }));
-    }
+  const formatSlot = (slot) => {
+    const [hours, minutes] = slot.split(':').map(Number);
+    return new Intl.DateTimeFormat(locale, { hour: 'numeric', minute: '2-digit' }).format(new Date(2000, 0, 1, hours, minutes));
   };
 
-  // Validate form fields
+  const handleChange = (name, value) => {
+    setFormData((data) => ({ ...data, [name]: value }));
+    if (errors[name]) setErrors((current) => ({ ...current, [name]: undefined }));
+  };
+
   const validate = () => {
-    const newErrors = {};
-    
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+    const next = {};
+    if (step === 1) {
+      if (!formData.name.trim()) next.name = t('booking.errors.name');
+      if (!formData.email.trim()) next.email = t('booking.errors.email');
+      else if (!/^\S+@\S+\.\S+$/.test(formData.email)) next.email = t('booking.errors.emailInvalid');
+      if (!formData.phone.trim()) next.phone = t('booking.errors.phone');
+    } else {
+      if (!formData.date) next.date = t('booking.errors.date');
+      if (!formData.time) next.time = t('booking.errors.time');
     }
-    
-    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-    
-    if (step === 2) {
-      if (!formData.date) newErrors.date = 'Please select a date';
-      if (!formData.time) newErrors.time = 'Please select a time';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors(next);
+    return Object.keys(next).length === 0;
   };
 
-  // Proceed to next step
   const nextStep = () => {
-    if (validate()) {
-      setStep(step + 1);
-      window.scrollTo(0, 0);
+    if (validate()) setStep(2);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (step === 1) {
+      nextStep();
+      return;
     }
+    if (!validate()) return;
+    setLoading(true);
+    // Simulated request – replace with a real booking API when available
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    setLoading(false);
+    setSuccess(true);
+    closeTimer.current = setTimeout(onClose, 3500);
   };
 
-  // Go back to previous step
-  const prevStep = () => {
-    setStep(step - 1);
-    window.scrollTo(0, 0);
-  };
-
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (validate()) {
-      setLoading(true);
-      
-      try {
-        // Simulate API call with a timeout
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Reset form after successful submission
-        setSuccess(true);
-        
-        // Reset after 5 seconds
-        setTimeout(() => {
-          setSuccess(false);
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            vehicle: '',
-            date: '',
-            time: '',
-            notes: '',
-            service: service || 'General Service'
-          });
-          setStep(1);
-          onClose();
-        }, 3000);
-      } catch (error) {
-        console.error('Error submitting form:', error);
-        setErrors({ form: 'Failed to submit form. Please try again.' });
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
-  // Generate today's date in YYYY-MM-DD format
-  const today = new Date().toISOString().split('T')[0];
-
-  // If modal is not open, don't render anything
-  if (!isOpen) return null;
+  const primaryButton =
+    'w-full sm:w-auto inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-6 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-75';
+  const secondaryButton =
+    'w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-6 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500';
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-500 opacity-75" onClick={onClose}></div>
-        </div>
+    <div className="fixed inset-0 z-[60] overflow-y-auto">
+      <div className="fixed inset-0 bg-gray-600/75" onClick={onClose} aria-hidden="true" />
+      <div className="flex min-h-full items-center justify-center p-4">
+        <div
+          ref={dialogRef}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="booking-title"
+          className="relative w-full max-w-lg bg-white rounded-lg text-start overflow-hidden shadow-xl focus:outline-none"
+        >
+          <button
+            type="button"
+            className="absolute top-4 end-4 rounded-md text-gray-400 hover:text-gray-500"
+            onClick={onClose}
+            aria-label={t('common.close')}
+          >
+            <X className="h-6 w-6" />
+          </button>
 
-        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="absolute top-0 right-0 pt-4 pr-4">
-            <button
-              type="button"
-              className="bg-white rounded-md text-gray-400 hover:text-gray-500"
-              onClick={onClose}
-            >
-              <span className="sr-only">Close</span>
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            {success ? (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="h-8 w-8 text-green-600" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Booking Confirmed!</h3>
-                <p className="text-gray-600">
-                  Your appointment has been successfully scheduled. We've sent a confirmation email with all the details.
-                </p>
-              </div>
-            ) : (
-              <>
-                <h3 className="text-lg leading-6 font-bold text-gray-900 mb-4">
-                  {step === 1 ? 'Book Appointment' : 'Select Date & Time'}
-                </h3>
-                
-                {/* Service summary */}
-                <div className="bg-blue-50 rounded-md p-4 mb-6">
-                  <h4 className="font-bold text-gray-900">{formData.service}</h4>
-                  <div className="flex justify-between mt-1">
-                    {price && <p className="text-gray-700">Price: {price}</p>}
-                    {duration && <p className="text-gray-700">Duration: {duration}</p>}
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              {success ? (
+                <div className="text-center py-8" role="status">
+                  <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
+                  <h3 id="booking-title" className="text-xl font-bold text-gray-900 mb-2">
+                    {t('booking.confirmedTitle')}
+                  </h3>
+                  <p className="text-gray-600">{t('booking.confirmedText')}</p>
                 </div>
+              ) : (
+                <>
+                  <h3 id="booking-title" className="text-lg leading-6 font-bold text-gray-900 mb-4 pe-8">
+                    {step === 1 ? t('booking.title') : t('booking.selectDateTime')}
+                  </h3>
 
-                <form onSubmit={handleSubmit}>
-                  {/* Step 1: Contact Information */}
+                  <div className="bg-blue-50 rounded-md p-4 mb-6">
+                    <h4 className="font-bold text-gray-900">{serviceName}</h4>
+                    {(price || duration) && (
+                      <div className="flex flex-wrap justify-between gap-2 mt-1">
+                        {price && <p className="text-gray-700">{t('booking.price', { price })}</p>}
+                        {duration && <p className="text-gray-700">{t('common.duration', { value: duration })}</p>}
+                      </div>
+                    )}
+                  </div>
+
                   {step === 1 && (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="name">
-                          Full Name <span className="text-red-500">*</span>
+                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="booking-name">
+                          {t('booking.name')} <span className="text-red-500">*</span>
                         </label>
-                        <input 
-                          type="text" 
-                          id="name"
-                          name="name"
+                        <input
+                          type="text"
+                          id="booking-name"
+                          autoComplete="name"
                           value={formData.name}
-                          onChange={handleChange}
-                          className={`block w-full bg-gray-50 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                          placeholder="Your name"
+                          onChange={(e) => handleChange('name', e.target.value)}
+                          className={inputClass(errors.name)}
+                          placeholder={t('booking.namePlaceholder')}
                         />
                         {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                       </div>
-                      
                       <div>
-                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
-                          Email Address <span className="text-red-500">*</span>
+                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="booking-email">
+                          {t('booking.email')} <span className="text-red-500">*</span>
                         </label>
-                        <input 
-                          type="email" 
-                          id="email"
-                          name="email"
+                        <input
+                          type="email"
+                          id="booking-email"
+                          dir="ltr"
+                          autoComplete="email"
                           value={formData.email}
-                          onChange={handleChange}
-                          className={`block w-full bg-gray-50 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                          placeholder="Your email"
+                          onChange={(e) => handleChange('email', e.target.value)}
+                          className={`${inputClass(errors.email)} rtl:text-right`}
+                          placeholder={t('booking.emailPlaceholder')}
                         />
                         {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                       </div>
-                      
                       <div>
-                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="phone">
-                          Phone Number <span className="text-red-500">*</span>
+                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="booking-phone">
+                          {t('booking.phone')} <span className="text-red-500">*</span>
                         </label>
-                        <input 
-                          type="tel" 
-                          id="phone"
-                          name="phone"
+                        <input
+                          type="tel"
+                          id="booking-phone"
+                          dir="ltr"
+                          autoComplete="tel"
                           value={formData.phone}
-                          onChange={handleChange}
-                          className={`block w-full bg-gray-50 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                          placeholder="Your phone number"
+                          onChange={(e) => handleChange('phone', e.target.value)}
+                          className={`${inputClass(errors.phone)} rtl:text-right`}
+                          placeholder="+20 10 1234 5678"
                         />
                         {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
                       </div>
-                      
                       <div>
-                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="vehicle">
-                          Vehicle Information
+                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="booking-vehicle">
+                          {t('booking.vehicle')}
                         </label>
-                        <input 
-                          type="text" 
-                          id="vehicle"
-                          name="vehicle"
+                        <input
+                          type="text"
+                          id="booking-vehicle"
                           value={formData.vehicle}
-                          onChange={handleChange}
-                          className="block w-full bg-gray-50 border border-gray-300 rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          placeholder="Make, model and year (e.g., Toyota Camry 2022)"
+                          onChange={(e) => handleChange('vehicle', e.target.value)}
+                          className={inputClass(false)}
+                          placeholder={t('booking.vehiclePlaceholder')}
                         />
                       </div>
                     </div>
                   )}
 
-                  {/* Step 2: Date & Time Selection */}
                   {step === 2 && (
                     <div className="space-y-6">
                       <div>
-                        <label className="block text-gray-700 text-sm font-medium mb-2 flex items-center" htmlFor="date">
-                          <Calendar className="h-4 w-4 mr-2" /> 
-                          Select Date <span className="text-red-500">*</span>
+                        <label className="text-gray-700 text-sm font-medium mb-2 flex items-center" htmlFor="booking-date">
+                          <Calendar className="h-4 w-4 me-2" /> {t('booking.date')} <span className="text-red-500 ms-1">*</span>
                         </label>
-                        <input 
-                          type="date" 
-                          id="date"
-                          name="date"
-                          min={today}
+                        <input
+                          type="date"
+                          id="booking-date"
+                          min={localDateString()}
                           value={formData.date}
-                          onChange={handleChange}
-                          className={`block w-full bg-gray-50 border ${errors.date ? 'border-red-500' : 'border-gray-300'} rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                          onChange={(e) => handleChange('date', e.target.value)}
+                          className={inputClass(errors.date)}
                         />
                         {errors.date && <p className="mt-1 text-sm text-red-500">{errors.date}</p>}
                       </div>
-                      
-                      <div>
-                        <label className="block text-gray-700 text-sm font-medium mb-2 flex items-center" htmlFor="time">
-                          <Clock className="h-4 w-4 mr-2" /> 
-                          Select Time <span className="text-red-500">*</span>
-                        </label>
+                      <fieldset>
+                        <legend className="text-gray-700 text-sm font-medium mb-2 flex items-center">
+                          <Clock className="h-4 w-4 me-2" /> {t('booking.time')} <span className="text-red-500 ms-1">*</span>
+                        </legend>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                          {timeSlots.map((time, index) => (
+                          {TIME_SLOTS.map((slot) => (
                             <button
-                              key={index}
+                              key={slot}
                               type="button"
-                              className={`py-2 px-4 border ${formData.time === time ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-gray-300 hover:bg-gray-50'} rounded-md text-sm font-medium`}
-                              onClick={() => handleChange({ target: { name: 'time', value: time } })}
+                              aria-pressed={formData.time === slot}
+                              className={`py-2 px-4 border ${
+                                formData.time === slot ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-gray-300 hover:bg-gray-50'
+                              } rounded-md text-sm font-medium`}
+                              onClick={() => handleChange('time', slot)}
                             >
-                              {time}
+                              {formatSlot(slot)}
                             </button>
                           ))}
                         </div>
                         {errors.time && <p className="mt-3 text-sm text-red-500">{errors.time}</p>}
-                      </div>
-                      
+                      </fieldset>
                       <div>
-                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="notes">
-                          Additional Notes
+                        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="booking-notes">
+                          {t('booking.notes')}
                         </label>
-                        <textarea 
-                          id="notes"
-                          name="notes"
+                        <textarea
+                          id="booking-notes"
                           rows="3"
                           value={formData.notes}
-                          onChange={handleChange}
-                          className="block w-full bg-gray-50 border border-gray-300 rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          placeholder="Any special requests or information"
-                        ></textarea>
+                          onChange={(e) => handleChange('notes', e.target.value)}
+                          className={inputClass(false)}
+                          placeholder={t('booking.notesPlaceholder')}
+                        />
                       </div>
                     </div>
                   )}
-
-                  {/* Form Errors */}
-                  {errors.form && (
-                    <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-md">
-                      {errors.form}
-                    </div>
-                  )}
-                </form>
-              </>
-            )}
-          </div>
-
-          {/* Form Actions */}
-          {!success && (
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              {step === 1 ? (
-                <button
-                  type="button"
-                  className="w-full sm:w-auto sm:ml-3 inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  onClick={nextStep}
-                >
-                  Continue
-                </button>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    className={`w-full sm:w-auto sm:ml-3 inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${loading ? 'opacity-75 cursor-not-allowed' : ''}`}
-                    onClick={handleSubmit}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Processing...
-                      </>
-                    ) : (
-                      'Confirm Booking'
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 sm:mt-0 w-full sm:w-auto sm:ml-3 inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-6 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    onClick={prevStep}
-                    disabled={loading}
-                  >
-                    Back
-                  </button>
                 </>
               )}
-              <button
-                type="button"
-                className="mt-3 sm:mt-0 w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-6 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                onClick={onClose}
-                disabled={loading}
-              >
-                Cancel
-              </button>
             </div>
-          )}
+
+            {!success && (
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                <button type="button" className={secondaryButton} onClick={onClose} disabled={loading}>
+                  {t('booking.cancel')}
+                </button>
+                {step === 2 && (
+                  <button type="button" className={secondaryButton} onClick={() => setStep(1)} disabled={loading}>
+                    {t('booking.back')}
+                  </button>
+                )}
+                <button type="submit" className={primaryButton} disabled={loading}>
+                  {loading && <span className="me-2 h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />}
+                  {step === 1 ? t('booking.continue') : loading ? t('booking.processing') : t('booking.confirm')}
+                </button>
+              </div>
+            )}
+          </form>
         </div>
       </div>
     </div>

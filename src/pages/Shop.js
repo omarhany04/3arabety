@@ -1,706 +1,212 @@
-import React, { useState } from 'react';
-import { ShoppingCart, Filter, Grid, List, ChevronDown, ChevronUp, Search, Check } from 'react-feather';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Filter, Grid, List, ChevronDown, ChevronUp, Search, Frown } from 'react-feather';
 import BrandFilter from '../components/common/shop/BrandFilter';
-import { useCart } from '../context/CartContext';
+import ProductCard from '../components/common/ProductCard';
+import { CAR_BRANDS, CATEGORIES, MAX_PRODUCT_PRICE, PRODUCTS } from '../data/products';
+import { matchesQuery, productSearchText } from '../utils/search';
+import { useTranslation } from '../i18n';
+
+const SORTERS = {
+  popular: (a, b) => b.reviews - a.reviews,
+  rating: (a, b) => b.rating - a.rating || b.reviews - a.reviews,
+  'price-low': (a, b) => a.price - b.price,
+  'price-high': (a, b) => b.price - a.price,
+};
+const SORT_KEYS = Object.keys(SORTERS);
+
+const categoryCounts = PRODUCTS.reduce((counts, product) => {
+  counts[product.category] = (counts[product.category] || 0) + 1;
+  return counts;
+}, {});
+
+const brandCounts = PRODUCTS.reduce((counts, product) => {
+  product.brands.forEach((brand) => {
+    counts[brand] = (counts[brand] || 0) + 1;
+  });
+  return counts;
+}, {});
+
+const BRANDS_WITH_PRODUCTS = CAR_BRANDS.map((brand) => ({ ...brand, count: brandCounts[brand.id] || 0 }))
+  .filter((brand) => brand.count > 0)
+  .sort((a, b) => b.count - a.count);
 
 const Shop = () => {
-  // Cart functionality
-  const { addItem } = useCart();
+  const { t, formatPrice } = useTranslation();
+  const [searchParams] = useSearchParams();
 
-  // State for filters and products
-  const [categoryFilter, setCategoryFilter] = useState('all');
-  const [brandFilter, setBrandFilter] = useState([]);
+  const initialCategory = CATEGORIES.includes(searchParams.get('category')) ? searchParams.get('category') : 'all';
+  const initialBrand = searchParams.get('brand');
+
+  const [categoryFilter, setCategoryFilter] = useState(initialCategory);
+  const [brandFilter, setBrandFilter] = useState(brandCounts[initialBrand] ? [initialBrand] : []);
   const [sortBy, setSortBy] = useState('popular');
   const [viewMode, setViewMode] = useState('grid');
-  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [priceRange, setPriceRange] = useState([0, MAX_PRODUCT_PRICE]);
   const [showFilters, setShowFilters] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = viewMode === 'list' ? 3 : 9;
+  const productsPerPage = viewMode === 'list' ? 6 : 9;
 
-  // State for success message
-  const [addedProducts, setAddedProducts] = useState({});
+  // Keep the filters in sync when arriving from links such as "/shop?category=brakes"
+  useEffect(() => {
+    const category = searchParams.get('category');
+    const brand = searchParams.get('brand');
+    const query = searchParams.get('q');
+    if (CATEGORIES.includes(category)) setCategoryFilter(category);
+    if (brandCounts[brand]) setBrandFilter([brand]);
+    if (query) setSearchQuery(query);
+  }, [searchParams]);
 
+  // Go back to the first page whenever the result set changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [categoryFilter, brandFilter, priceRange, searchQuery, sortBy, viewMode]);
 
-  const allProducts = [
-    // Spare Parts
-    {
-      id: 1,
-      name: 'Premium Brake Disc',
-      category: 'spare',
-      description: 'High performance brake rotor',
-      brand: ['toyota', 'honda', 'nissan'],
-      price: 464.99,
-      rating: 4.7,
-      reviews: 58,
-      image: 'https://i.ibb.co/YB2yPnCf/Break-Disc.png',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 2,
-      name: 'Serpentine Belt',
-      category: 'spare',
-      description: 'Premium quality drive belt',
-      brand: ['ford', 'chevrolet', 'toyota'],
-      price: 229.99,
-      rating: 4.5,
-      reviews: 42,
-      image: 'https://i.ibb.co/4nFpmYYK/Serpentine.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    
-    // Fluids
-    {
-      id: 3,
-      name: 'Synthetic Engine Oil',
-      category: 'fluids',
-      description: '5W-30, 5 liter container',
-      brand: ['fiat ', 'renault', 'opel'],
-      price: 1199.99,
-      rating: 4.8,
-      reviews: 122,
-      image: 'https://i.ibb.co/Xf2sdYGg/Synthetic-Engine-Oil.jpg',
-      badge: { text: 'Sale', color: 'red' },
-      oldPrice: 44.99
-    },
-    {
-      id: 4,
-      name: 'Antifreeze & Coolant',
-      category: 'fluids',
-      description: 'All-season protection, 1 gallon',
-      brand: ['mitsubishi', 'renault'],
-      price: 619.99,
-      rating: 4.3,
-      reviews: 37,
-      image: 'https://i.ibb.co/FLn6rkN4/Radiator-Coolant.jpg',
-      badge: { text: 'Sale', color: 'red' },
-      oldPrice: 24.99
-    },
-    
-    // Batteries
-    {
-      id: 5,
-      name: 'Car Battery',
-      category: 'batteries',
-      description: '12V 60Ah, high performance',
-      brand: ['subaru ', 'toyota', 'honda', 'nissan', 'hyundai', 'kia'],
-      price: 2499.99,
-      rating: 4.7,
-      reviews: 89,
-      image: 'https://i.ibb.co/Sw4yjNs7/Car-Battery.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 6,
-      name: 'Heavy Duty Truck Battery',
-      category: 'batteries',
-      description: '12V 100Ah, for commercial vehicles',
-      brand: ['subaru ', 'ford', 'chevrolet'],
-      price: 4349.99,
-      rating: 4.6,
-      reviews: 48,
-      image: 'https://i.ibb.co/4nsddYn7/Heavy-Battery.jpg',
-      badge: { text: 'Few Left', color: 'yellow' }
-    },
-    
-    // Car Lighting
-    {
-      id: 7,
-      name: 'LED Headlight Pair',
-      category: 'lighting',
-      description: 'High/low beam, fits most models',
-      brand: ['subaru ', 'toyota', 'honda', 'bmw'],
-      price: 489.99,
-      rating: 4.9,
-      reviews: 76,
-      image: 'https://i.ibb.co/JjDtwb4R/Led.jpgs',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 8,
-      name: 'Fog Light Kit',
-      category: 'lighting',
-      description: 'Universal fit with mounting hardware',
-      brand: ['bmw', 'mercedes', 'volkswagen'],
-      price: 774.99,
-      rating: 4.4,
-      reviews: 53,
-      image: 'https://i.ibb.co/mVCZSwhk/Fog-Lights.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    
-    // Car Care
-    {
-      id: 9,
-      name: 'Car Cleaning Kit',
-      category: 'carcare',
-      description: 'Complete kit with shampoo, wax and microfiber cloths',
-      brand: ['volkswagen'],
-      price:679.99,
-      rating: 4.8,
-      reviews: 112,
-      image: 'https://i.ibb.co/S4YBKYQ1/Cleaning-Kit.jpg',
-      badge: { text: 'Best Seller', color: 'green' }
-    },
-    {
-      id: 10,
-      name: 'Wheel Cleaner Spray',
-      category: 'carcare',
-      description: 'Professional grade, acid-free formula',
-      brand: ['peugeot'],
-      price: 224.99,
-      rating: 4.6,
-      reviews: 87,
-      image: 'https://i.ibb.co/35jf49BF/Wheel-Clean.webp',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    
-    // Accessories
-    {
-      id: 11,
-      name: 'All-Weather Floor Mats',
-      category: 'accessories',
-      description: 'Set of 4, custom fit for most vehicles',
-      brand: ['toyota', 'honda', 'ford'],
-      price: 899.99,
-      rating: 4.7,
-      reviews: 156,
-      image: 'https://i.ibb.co/kbL6XrG/Floor-Mats.png',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 12,
-      name: 'Car Phone Mount',
-      category: 'accessories',
-      description: 'Universal fit, dashboard or vent mounting',
-      brand: [],
-      price: 299.99,
-      rating: 4.5,
-      reviews: 203,
-      image: 'https://i.ibb.co/GGyLbqR/Phone-Holder.jpg',
-      badge: { text: 'Sale', color: 'red' },
-      oldPrice: 349.99
-    },
-    
-    // Engine Performance
-    {
-      id: 13,
-      name: 'High-Flow Air Filter',
-      category: 'engine',
-      description: 'Washable and reusable performance filter',
-      brand: ['bmw', 'audi', 'mercedes'],
-      price: 599.99,
-      rating: 4.6,
-      reviews: 78,
-      image: 'https://i.ibb.co/k2xw4r2B/High-Flow-Air-Filter.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 14,
-      name: 'Fuel Injector Cleaner',
-      category: 'engine',
-      description: 'Professional strength formula, 16oz bottle',
-      brand: ['fiat ', 'renault', 'suzuki'],
-      price: 649.99,
-      rating: 4.4,
-      reviews: 91,
-      image: 'https://i.ibb.co/qMgZ1nBt/Injector.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    
-    // Original products
-    {
-      id: 15,
-      name: 'Premium Oil Filter',
-      category: 'filters',
-      description: 'Fits multiple vehicle makes',
-      brand: ['toyota', 'honda', 'nissan'],
-      price: 1299.99,
-      rating: 4.5,
-      reviews: 42,
-      image: 'https://i.ibb.co/cdfvy7k/oil-filter.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 16,
-      name: 'Ceramic Brake Pads',
-      category: 'brakes',
-      description: 'Front set for Toyota/Honda',
-      brand: ['toyota', 'honda'],
-      price:999.99,
-      rating: 5,
-      reviews: 67,
-      image: 'https://i.ibb.co/Z6PCx1D9/Ceramic-Brakes.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 17,
-      name: 'Platinum Spark Plugs',
-      category: 'electrical',
-      description: 'Set of 4, extended life',
-      brand: ['ford', 'chevrolet', 'toyota'],
-      price: 449.99,
-      rating: 4.5,
-      reviews: 53,
-      image: 'https://i.ibb.co/cdfvy7k/spark-plugs.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-      id: 18,
-      name: 'Brake Rotors',
-      category: 'brakes',
-      description: 'Front pair, cross-drilled',
-      brand: ['bmw', 'mercedes', 'audi'],
-      price: 599.99,
-      rating: 4.6,
-      reviews: 43,
-      image: 'https://i.ibb.co/4DGBSnK/brake-rotors.jpg',
-      badge: { text: 'In Stock', color: 'green' }
-    },
-    {
-    id: 19,
-    name: 'Timing Chain Kit - Toyota Corolla',
-    category: 'spare',
-    description: 'Complete timing chain kit for Corolla 2014-2019',
-    brand: ['toyota'],
-    price: 1899.99,
-    rating: 4.6,
-    reviews: 52,
-    image: 'https://i.ibb.co/tM2VTmtN/ChainKit.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 20,
-    name: 'Control Arm - Honda Civic',
-    category: 'spare',
-    description: 'Front lower control arm, fits Civic 2016-2020',
-    brand: ['honda'],
-    price: 1099.99,
-    rating: 4.5,
-    reviews: 45,
-    image: 'https://i.ibb.co/ksRBZVsb/Control-Arms.jpg',
-    badge: { text: 'Few Left', color: 'yellow' }
-  },
-  {
-    id: 21,
-    name: 'Clutch Kit - Nissan Sentra',
-    category: 'engine',
-    description: 'High-performance clutch set for Sentra 2012-2018',
-    brand: ['nissan'],
-    price: 2299.99,
-    rating: 4.7,
-    reviews: 37,
-    image: 'https://i.ibb.co/MDxMsRSC/Clutch-Kit-Nissan.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 22,
-    name: 'Ball Joint - Ford Focus',
-    category: 'brakes',
-    description: 'Heavy duty ball joint set for Focus 2013-2019',
-    brand: ['ford'],
-    price: 799.99,
-    rating: 4.3,
-    reviews: 29,
-    image: 'https://i.postimg.cc/qvt9b0pq/Ford-Joint.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 23,
-    name: 'Radiator Fan Assembly - BMW 3 Series',
-    category: 'cooling',
-    description: 'OEM fan motor and blade for BMW E90',
-    brand: ['bmw'],
-    price: 3149.99,
-    rating: 4.8,
-    reviews: 66,
-    image: 'https://i.ibb.co/5g6CMmFn/Fan-Assembly.jpg',
-    badge: { text: 'Sale', color: 'red' },
-    oldPrice: 3599.99
-  },
-  {
-    id: 24,
-    name: 'Oil Pan - Mercedes C-Class',
-    category: 'engine',
-    description: 'Reinforced aluminum oil pan for C180/C200 W204',
-    brand: ['mercedes'],
-    price: 1249.99,
-    rating: 4.4,
-    reviews: 21,
-    image: 'https://i.postimg.cc/bNLCjvzL/Mercedes-Oil-Pan.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 25,
-    name: 'Driveshaft - Chevrolet Cruze',
-    category: 'spare',
-    description: 'Front driveshaft, left side, fits Cruze 2011-2016',
-    brand: ['chevrolet'],
-    price: 1649.99,
-    rating: 4.5,
-    reviews: 33,
-    image: 'https://i.ibb.co/rf1GZ10q/Ford-Ball-Joint.jpg',
-    badge: { text: 'Few Left', color: 'yellow' }
-  },
-  {
-    id: 26,
-    name: 'Steering Rack - Hyundai Elantra',
-    category: 'spare',
-    description: 'Power steering rack, fits Elantra 2016-2020',
-    brand: ['hyundai'],
-    price: 2999.99,
-    rating: 4.6,
-    reviews: 40,
-    image: 'https://i.ibb.co/k2wnSzQt/Steering-Rack.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 27,
-    name: 'Fuel Pump Assembly - Kia Sportage',
-    category: 'engine',
-    description: 'OEM electric fuel pump for Sportage 2015-2019',
-    brand: ['kia'],
-    price: 2149.99,
-    rating: 4.7,
-    reviews: 50,
-    image: 'https://i.ibb.co/fG1ynfCd/FuelPump.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 28,
-    name: 'Axle Shaft - Audi A4',
-    category: 'spare',
-    description: 'Front CV axle shaft, fits A4 B8 2009-2016',
-    brand: ['audi'],
-    price: 2799.99,
-    rating: 4.6,
-    reviews: 36,
-    image: 'https://i.ibb.co/mfF05Xc/Audi-Assembly.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 29,
-    name: 'Water Pump - Peugeot 301',
-    category: 'cooling',
-    description: 'Durable OEM water pump for 1.6L engine',
-    brand: ['peugeot'],
-    price: 1199.99,
-    rating: 4.3,
-    reviews: 24,
-    image: 'https://i.postimg.cc/3Nsg3g0P/Peugeot.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 30,
-    name: 'Brake Booster - Suzuki Swift',
-    category: 'brakes',
-    description: 'High-efficiency vacuum booster for Swift 2013-2018',
-    brand: ['suzuki'],
-    price: 1749.99,
-    rating: 4.4,
-    reviews: 32,
-    image: 'https://i.postimg.cc/90ddbLfJ/Brake-Booster.png',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 31,
-    name: 'CV Joint Kit - Renault Logan',
-    category: 'spare',
-    description: 'Outer joint kit with boot and grease, fits Logan 2011-2019',
-    brand: ['renault'],
-    price: 849.99,
-    rating: 4.2,
-    reviews: 19,
-    image: 'https://i.postimg.cc/6qrPZLxN/Renault-Logan-Kit.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 32,
-    name: 'Engine Mount - Opel Astra',
-    category: 'engine',
-    description: 'Right side engine mount for Astra J 2009-2015',
-    brand: ['opel'],
-    price: 699.99,
-    rating: 4.5,
-    reviews: 22,
-    image: 'https://i.postimg.cc/7LrTsgpR/Opel-Engine-Mount.webp',
-    badge: { text: 'In Stock', color: 'green' }
-  },
-  {
-    id: 33,
-    name: 'Shock Absorber - Mitsubishi Lancer',
-    category: 'brakes',
-    description: 'Rear gas shock absorber, fits Lancer EX 2008-2017',
-    brand: ['mitsubishi'],
-    price: 1349.99,
-    rating: 4.4,
-    reviews: 30,
-    image: 'https://i.postimg.cc/fTyFyZtC/Lancer.webp',
-    badge: { text: 'Sale', color: 'red' },
-    oldPrice: 1499.99
-  },
-  {
-    id: 34,
-    name: 'Dashboard Camera - Full HD',
-    category: 'accessories',
-    description: 'Wide-angle dash cam with night vision and loop recording',
-    brand: ['subaru ', 'ford', 'toyota'],
-    price: 1149.99,
-    rating: 4.6,
-    reviews: 44,
-    image: 'https://i.postimg.cc/bNb6sRHC/Dashcam.jpg',
-    badge: { text: 'In Stock', color: 'green' }
-  }
-  ];
-
-  // Calculate category counts
-  const categoryCounts = allProducts.reduce((acc, product) => {
-    acc[product.category] = (acc[product.category] || 0) + 1;
-    return acc;
-  }, {});
-
-  const categories = Object.entries(categoryCounts).map(([id, count]) => ({
+  const categories = CATEGORIES.filter((id) => categoryCounts[id]).map((id) => ({
     id,
-    name: {
-      spare: 'Spare Parts',
-      fluids: 'Fluids',
-      batteries: 'Batteries',
-      lighting: 'Car Lighting',
-      carcare: 'Car Care',
-      accessories: 'Accessories',
-      engine: 'Engine Performance',
-      brakes: 'Brakes & Suspension',
-      electrical: 'Electrical',
-      filters: 'Filters',
-      cooling: 'Cooling System',
-      body: 'Body & Exterior',
-      interior: 'Interior'
-    }[id] || id,
-    count
+    name: t(`categories.${id}`),
+    count: categoryCounts[id],
   }));
 
-  // Calculate actual brand counts from products
-  const brandCounts = allProducts.reduce((acc, product) => {
-    product.brand.forEach(brandId => {
-      acc[brandId] = (acc[brandId] || 0) + 1;
+  const sortedProducts = useMemo(() => {
+    const filtered = PRODUCTS.filter((product) => {
+      if (categoryFilter !== 'all' && product.category !== categoryFilter) return false;
+      if (brandFilter.length > 0 && !brandFilter.some((brand) => product.brands.includes(brand))) return false;
+      if (product.price < priceRange[0] || product.price > priceRange[1]) return false;
+      if (searchQuery && !matchesQuery(productSearchText(product), searchQuery)) return false;
+      return true;
     });
-    return acc;
-  }, {});
+    return filtered.sort(SORTERS[sortBy]);
+  }, [categoryFilter, brandFilter, priceRange, searchQuery, sortBy]);
 
-  // Create brands array with accurate counts
-  const brands = [
-    { id: 'toyota', name: 'Toyota', count: brandCounts['toyota'] || 0 },
-    { id: 'honda', name: 'Honda', count: brandCounts['honda'] || 0 },
-    { id: 'bmw', name: 'BMW', count: brandCounts['bmw'] || 0 },
-    { id: 'mercedes', name: 'Mercedes', count: brandCounts['mercedes'] || 0 },
-    { id: 'ford', name: 'Ford', count: brandCounts['ford'] || 0 },
-    { id: 'chevrolet', name: 'Chevrolet', count: brandCounts['chevrolet'] || 0 },
-    { id: 'audi', name: 'Audi', count: brandCounts['audi'] || 0 },
-    { id: 'nissan', name: 'Nissan', count: brandCounts['nissan'] || 0 },
-    { id: 'hyundai', name: 'Hyundai', count: brandCounts['hyundai'] || 0 },
-    { id: 'kia', name: 'Kia', count: brandCounts['kia'] || 0 },
-    { id: 'volkswagen', name: 'Volkswagen', count: brandCounts['volkswagen'] || 0 },
-    { id: 'peugeot', name: 'Peugeot', count: brandCounts['peugeot'] || 0 },
-    { id: 'suzuki', name: 'Suzuki', count: brandCounts['suzuki'] || 0 },
-    { id: 'renault', name: 'Renault', count: brandCounts['renault'] || 0 },
-    { id: 'opel', name: 'Opel', count: brandCounts['opel'] || 0 },
-    { id: 'mitsubishi', name: 'Mitsubishi', count: brandCounts['mitsubishi'] || 0 },
-    { id: 'subaru ', name: 'Subaru ', count: brandCounts['subaru '] || 0 },
-    { id: 'fiat ', name: 'Fiat ', count: brandCounts['fiat '] || 0 },
-  ];
+  const totalPages = Math.max(1, Math.ceil(sortedProducts.length / productsPerPage));
+  const firstIndex = (currentPage - 1) * productsPerPage;
+  const paginatedProducts = sortedProducts.slice(firstIndex, firstIndex + productsPerPage);
 
-  // Sort brands by count (most products first)
-  const sortedBrands = [...brands].sort((a, b) => b.count - a.count)
-    .filter(brand => brand.count > 0); // Only include brands that have products
-
-  // State for installation service
-  const [installationServices, setInstallationServices] = useState({});
-
-  const toggleInstallation = (productId) => {
-    setInstallationServices(prevState => ({
-      ...prevState,
-      [productId]: !prevState[productId]
-    }));
-  };
-
-  // Handle adding to cart
-  const handleAddToCart = (product) => {
-    addItem(product, 1, installationServices[product.id] || false);
-    
-    // Show success message for this specific product
-    setAddedProducts(prev => ({
-      ...prev,
-      [product.id]: true
-    }));
-    
-    // Hide message after 3 seconds
-    setTimeout(() => {
-      setAddedProducts(prev => ({
-        ...prev,
-        [product.id]: false
-      }));
-    }, 3000);
-  };
-
-  // Toggle brand filter
   const toggleBrand = (brandId) => {
-    setBrandFilter(prevBrands => 
-      prevBrands.includes(brandId)
-        ? prevBrands.filter(b => b !== brandId)
-        : [...prevBrands, brandId]
-    );
+    setBrandFilter((brands) => (brands.includes(brandId) ? brands.filter((b) => b !== brandId) : [...brands, brandId]));
   };
 
-  // Filter products based on category, brand, price, and search
-  const filteredProducts = allProducts.filter(product => {
-    // Apply category filter
-    if (categoryFilter !== 'all' && product.category !== categoryFilter) return false;
-    
-    // Apply brand filter
-    if (brandFilter.length > 0 && !brandFilter.some(brand => product.brand.includes(brand))) return false;
-    
-    // Apply price range filter
-    if (product.price < priceRange[0] || product.price > priceRange[1]) return false;
-    
-    // Apply search filter
-    if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
-        !product.description.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    
-    return true;
-  });
-
-  // Sort products
-    const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortBy) {
-      case 'price-low':
-        return a.price - b.price;
-      case 'price-high':
-        return b.price - a.price;
-      case 'rating':
-        return b.rating - a.rating;
-      default: // popular - by review count
-        return b.reviews - a.reviews;
-    }
-  });
-
-  // Pagination logic
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const paginatedProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
-
-  // Handler for price range filter
-  const handlePriceChange = (e, index) => {
-    const newRange = [...priceRange];
-    newRange[index] = Number(e.target.value);
-    setPriceRange(newRange);
+  const handlePriceChange = (event, index) => {
+    const value = Math.min(Math.max(Number(event.target.value) || 0, 0), MAX_PRODUCT_PRICE);
+    setPriceRange((range) => {
+      const next = [...range];
+      next[index] = value;
+      if (next[0] > next[1]) next[index === 0 ? 1 : 0] = value;
+      return next;
+    });
   };
 
-  // Reset all filters
   const resetFilters = () => {
     setCategoryFilter('all');
     setBrandFilter([]);
-    setPriceRange([0, 10000]);
+    setPriceRange([0, MAX_PRODUCT_PRICE]);
     setSearchQuery('');
   };
 
-  const formatPrice = (price) =>
-  new Intl.NumberFormat('en-EG', {
-    style: 'currency',
-    currency: 'EGP',
-    maximumFractionDigits: 2,
-  }).format(price);
+  const changePage = (page) => {
+    setCurrentPage(page);
+    document.getElementById('shop-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const categoryButtonClass = (active) =>
+    `flex justify-between w-full py-1 px-2 rounded text-start hover:bg-gray-100 ${active ? 'font-bold text-blue-600' : ''}`;
+  const chipClass = (active) => `py-2 px-3 text-sm rounded ${active ? 'bg-blue-600 text-white' : 'bg-gray-100'}`;
+
+  const priceSliders = (
+    <>
+      <div className="flex justify-between mb-2 text-sm">
+        <span>{formatPrice(priceRange[0])}</span>
+        <span>{formatPrice(priceRange[1])}</span>
+      </div>
+      <div className="mb-4 space-y-2">
+        <input
+          type="range"
+          min="0"
+          max={MAX_PRODUCT_PRICE}
+          step="50"
+          value={priceRange[0]}
+          onChange={(e) => handlePriceChange(e, 0)}
+          className="w-full accent-blue-600"
+          aria-label={t('shop.minPrice')}
+        />
+        <input
+          type="range"
+          min="0"
+          max={MAX_PRODUCT_PRICE}
+          step="50"
+          value={priceRange[1]}
+          onChange={(e) => handlePriceChange(e, 1)}
+          className="w-full accent-blue-600"
+          aria-label={t('shop.maxPrice')}
+        />
+      </div>
+    </>
+  );
 
   return (
     <div className="bg-gray-50 py-16">
       <div className="container mx-auto px-6 md:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shop Car Products</h2>
-          <p className="text-lg text-gray-600">
-            Browse our extensive collection of quality car parts, accessories, and maintenance products.
-          </p>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('shop.title')}</h1>
+          <p className="text-lg text-gray-600">{t('shop.subtitle')}</p>
         </div>
 
-        {/* Search Bar */}
+        {/* Search */}
         <div className="max-w-4xl mx-auto mb-8">
           <div className="relative">
             <input
-              type="text"
-              className="w-full bg-white border border-gray-300 rounded-md py-3 pl-10 pr-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Search for parts or products..."
+              type="search"
+              className="w-full bg-white border border-gray-300 rounded-md py-3 ps-10 pe-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder={t('shop.searchPlaceholder')}
+              aria-label={t('shop.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
+            <Search className="absolute inset-y-0 start-3 my-auto h-5 w-5 text-gray-400 pointer-events-none" />
           </div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar / Filters - Desktop */}
-          <div className="hidden lg:block lg:w-1/4">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Categories</h3>
+          {/* Sidebar filters (desktop) */}
+          <aside className="hidden lg:block lg:w-1/4">
+            <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
+              <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">{t('shop.categories')}</h3>
               <ul className="space-y-2 mb-6">
                 <li>
-                  <button
-                    className={`flex justify-between w-full py-1 px-2 rounded text-left hover:bg-gray-100 ${categoryFilter === 'all' ? 'font-bold text-blue-600' : ''}`}
-                    onClick={() => setCategoryFilter('all')}
-                  >
-                    <span>All Products</span>
-                    <span className="text-gray-500 text-sm">{allProducts.length}</span>
+                  <button type="button" className={categoryButtonClass(categoryFilter === 'all')} onClick={() => setCategoryFilter('all')}>
+                    <span>{t('shop.allProducts')}</span>
+                    <span className="text-gray-500 text-sm">{PRODUCTS.length}</span>
                   </button>
                 </li>
-                {categories.map(cat => (
-                  <li key={cat.id}>
+                {categories.map((category) => (
+                  <li key={category.id}>
                     <button
-                      className={`flex justify-between w-full py-1 px-2 rounded text-left hover:bg-gray-100 ${categoryFilter === cat.id ? 'font-bold text-blue-600' : ''}`}
-                      onClick={() => setCategoryFilter(cat.id)}
+                      type="button"
+                      className={categoryButtonClass(categoryFilter === category.id)}
+                      onClick={() => setCategoryFilter(category.id)}
                     >
-                      <span>{cat.name}</span>
-                      <span className="text-gray-500 text-sm">{cat.count}</span>
+                      <span>{category.name}</span>
+                      <span className="text-gray-500 text-sm">{category.count}</span>
                     </button>
                   </li>
                 ))}
               </ul>
 
-              {/* Brand Filter Component - using sortedBrands */}
-              <BrandFilter 
-                selectedBrands={brandFilter} 
-                toggleBrand={toggleBrand} 
-                allBrands={sortedBrands} 
+              <BrandFilter
+                selectedBrands={brandFilter}
+                toggleBrand={toggleBrand}
+                clearBrands={() => setBrandFilter([])}
+                allBrands={BRANDS_WITH_PRODUCTS}
               />
 
-              <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Price Range</h3>
+              <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">{t('shop.priceRange')}</h3>
               <div className="px-2 mb-6">
-                <div className="flex justify-between mb-2">
-                  <span>EGP {priceRange[0]}</span>
-                  <span>EGP {priceRange[1]}</span>
-                </div>
-                <div className="mb-4">
-                  <input
-                    type="range"
-                    min="0"
-                    max="10000"
-                    value={priceRange[0]}
-                    onChange={(e) => handlePriceChange(e, 0)}
-                    className="w-full"
-                  />
-                  <input
-                    type="range"
-                    min="0"
-                    max="10000"
-                    value={priceRange[1]}
-                    onChange={(e) => handlePriceChange(e, 1)}
-                    className="w-full"
-                  />
-                </div>
+                {priceSliders}
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="flex items-center">
-                    <span className="text-gray-600 text-sm mr-2">Min: EGP</span>
+                  <label className="text-gray-600 text-sm">
+                    <span className="block mb-1">{t('shop.minPrice')}</span>
                     <input
                       type="number"
                       min="0"
@@ -709,71 +215,72 @@ const Shop = () => {
                       onChange={(e) => handlePriceChange(e, 0)}
                       className="w-full bg-gray-50 border border-gray-300 rounded px-2 py-1 text-gray-700 text-sm"
                     />
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-gray-600 text-sm mr-2">Max: EGP</span>
+                  </label>
+                  <label className="text-gray-600 text-sm">
+                    <span className="block mb-1">{t('shop.maxPrice')}</span>
                     <input
                       type="number"
                       min={priceRange[0]}
-                      max="10000"
+                      max={MAX_PRODUCT_PRICE}
                       value={priceRange[1]}
                       onChange={(e) => handlePriceChange(e, 1)}
                       className="w-full bg-gray-50 border border-gray-300 rounded px-2 py-1 text-gray-700 text-sm"
                     />
-                  </div>
+                  </label>
                 </div>
               </div>
 
-              <button 
+              <button
+                type="button"
                 onClick={resetFilters}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition duration-300 flex justify-center items-center"
               >
-                <Filter className="h-4 w-4 mr-2" /> Reset Filters
+                <Filter className="h-4 w-4 me-2" /> {t('common.resetFilters')}
               </button>
             </div>
-          </div>
+          </aside>
 
-          {/* Mobile Filter Button */}
-          <div className="lg:hidden mb-4">
+          {/* Filters (mobile) */}
+          <div className="lg:hidden">
             <button
+              type="button"
               className="w-full bg-white border border-gray-300 rounded-md py-3 px-4 flex justify-between items-center"
-              onClick={() => setShowFilters(!showFilters)}
+              onClick={() => setShowFilters((value) => !value)}
+              aria-expanded={showFilters}
             >
-              <span className="font-medium text-gray-700">Filter & Sort</span>
+              <span className="font-medium text-gray-700">{t('shop.filterAndSort')}</span>
               {showFilters ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
             </button>
 
-            {/* Mobile Filters Panel */}
             {showFilters && (
               <div className="bg-white rounded-lg shadow-md p-6 mt-2">
                 <div className="mb-6">
-                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Categories</h3>
+                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">{t('shop.categories')}</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    <button
-                      className={`py-2 px-3 text-sm rounded ${categoryFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
-                      onClick={() => setCategoryFilter('all')}
-                    >
-                      All Products
+                    <button type="button" className={chipClass(categoryFilter === 'all')} onClick={() => setCategoryFilter('all')}>
+                      {t('shop.allProducts')}
                     </button>
-                    {categories.slice(0, 9).map(cat => (
+                    {categories.map((category) => (
                       <button
-                        key={cat.id}
-                        className={`py-2 px-3 text-sm rounded ${categoryFilter === cat.id ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
-                        onClick={() => setCategoryFilter(cat.id)}
+                        type="button"
+                        key={category.id}
+                        className={chipClass(categoryFilter === category.id)}
+                        onClick={() => setCategoryFilter(category.id)}
                       >
-                        {cat.name}
+                        {category.name}
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div className="mb-6">
-                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Brands</h3>
+                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">{t('shop.brands')}</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    {sortedBrands.slice(0, 8).map(brand => (
+                    {BRANDS_WITH_PRODUCTS.map((brand) => (
                       <button
+                        type="button"
                         key={brand.id}
-                        className={`py-2 px-3 text-sm rounded ${brandFilter.includes(brand.id) ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
+                        className={chipClass(brandFilter.includes(brand.id))}
                         onClick={() => toggleBrand(brand.id)}
                       >
                         {brand.name}
@@ -783,325 +290,141 @@ const Shop = () => {
                 </div>
 
                 <div className="mb-6">
-                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Price Range</h3>
-                  <div className="px-2">
-                    <div className="flex justify-between mb-2">
-                      <span>EGP {priceRange[0]}</span>
-                      <span>EGP {priceRange[1]}</span>
-                    </div>
-                    <div className="mb-4">
-                      <input
-                        type="range"
-                        min="0"
-                        max="10000"
-                        value={priceRange[0]}
-                        onChange={(e) => handlePriceChange(e, 0)}
-                        className="w-full"
-                      />
-                      <input
-                        type="range"
-                        min="0"
-                        max="10000"
-                        value={priceRange[1]}
-                        onChange={(e) => handlePriceChange(e, 1)}
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
+                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">{t('shop.priceRange')}</h3>
+                  <div className="px-2">{priceSliders}</div>
                 </div>
 
                 <div className="mb-6">
-                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">Sort By</h3>
+                  <h3 className="font-bold text-lg border-b border-gray-200 pb-3 mb-4">{t('shop.sortBy')}</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    <button
-                      className={`py-2 px-3 text-sm rounded ${sortBy === 'popular' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
-                      onClick={() => setSortBy('popular')}
-                    >
-                      Most Popular
-                    </button>
-                    <button
-                      className={`py-2 px-3 text-sm rounded ${sortBy === 'rating' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
-                      onClick={() => setSortBy('rating')}
-                    >
-                      Highest Rated
-                    </button>
-                    <button
-                      className={`py-2 px-3 text-sm rounded ${sortBy === 'price-low' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
-                      onClick={() => setSortBy('price-low')}
-                    >
-                      Price: Low to High
-                    </button>
-                    <button
-                      className={`py-2 px-3 text-sm rounded ${sortBy === 'price-high' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
-                      onClick={() => setSortBy('price-high')}
-                    >
-                      Price: High to Low
-                    </button>
+                    {SORT_KEYS.map((key) => (
+                      <button type="button" key={key} className={chipClass(sortBy === key)} onClick={() => setSortBy(key)}>
+                        {t(`shop.sort.${key}`)}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="flex space-x-2">
-                  <button 
+                <div className="flex gap-2">
+                  <button
+                    type="button"
                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition duration-300"
                     onClick={() => setShowFilters(false)}
                   >
-                    Apply Filters
+                    {t('shop.applyFilters')}
                   </button>
-                  <button 
+                  <button
+                    type="button"
                     className="flex-1 border border-blue-600 text-blue-600 hover:bg-blue-50 py-2 rounded-md font-medium transition duration-300"
                     onClick={resetFilters}
                   >
-                    Reset
+                    {t('common.reset')}
                   </button>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Product Grid */}
-          <div className="lg:w-3/4">
-            {/* Sort and View Options - Desktop */}
-            <div className="hidden lg:flex justify-between items-center mb-6 bg-white rounded-lg shadow-sm p-4">
-              <div className="flex items-center">
-                <span className="text-gray-600 mr-2">Sort by:</span>
-                <select 
-                  className="bg-gray-50 border border-gray-300 rounded-md py-1 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                >
-                  <option value="popular">Most Popular</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                </select>
-              </div>
-              <div className="flex items-center">
-                <span className="text-gray-600 mr-2">View:</span>
-                <button 
-                  className={`p-1 rounded-md ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'} mr-1`}
-                  onClick={() => setViewMode('grid')}
-                >
-                  <Grid className="h-5 w-5" />
-                </button>
-                <button 
-                  className={`p-1 rounded-md ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
-                  onClick={() => setViewMode('list')}
-                >
-                  <List className="h-5 w-5" />
-                </button>
+          {/* Results */}
+          <div className="lg:w-3/4 scroll-mt-24" id="shop-results">
+            <div className="flex flex-wrap justify-between items-center gap-4 mb-6 bg-white rounded-lg shadow-sm p-4">
+              <p className="text-gray-600 text-sm" aria-live="polite">
+                {t('shop.resultCount', { count: sortedProducts.length })}
+              </p>
+              <div className="hidden lg:flex items-center gap-6">
+                <label className="flex items-center">
+                  <span className="text-gray-600 me-2">{t('shop.sortBy')}:</span>
+                  <select
+                    className="bg-gray-50 border border-gray-300 rounded-md py-1 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                  >
+                    {SORT_KEYS.map((key) => (
+                      <option key={key} value={key}>
+                        {t(`shop.sort.${key}`)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <div className="flex items-center">
+                  <span className="text-gray-600 me-2">{t('shop.view')}:</span>
+                  <button
+                    type="button"
+                    className={`p-1 rounded-md ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'} me-1`}
+                    onClick={() => setViewMode('grid')}
+                    aria-label={t('shop.gridView')}
+                    aria-pressed={viewMode === 'grid'}
+                  >
+                    <Grid className="h-5 w-5" />
+                  </button>
+                  <button
+                    type="button"
+                    className={`p-1 rounded-md ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+                    onClick={() => setViewMode('list')}
+                    aria-label={t('shop.listView')}
+                    aria-pressed={viewMode === 'list'}
+                  >
+                    <List className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Products Display */}
             {sortedProducts.length === 0 ? (
               <div className="bg-white rounded-lg shadow-md p-8 text-center">
-                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 className="mt-2 text-lg font-medium text-gray-900">No products found</h3>
-                <p className="mt-1 text-gray-500">Try adjusting your search or filter criteria.</p>
-                <button 
-                  className="mt-4 text-blue-600 hover:text-blue-800 font-medium"
-                  onClick={resetFilters}
-                >
-                  Reset all filters
+                <Frown className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-lg font-medium text-gray-900">{t('shop.noProducts')}</h3>
+                <p className="mt-1 text-gray-500">{t('shop.noProductsHint')}</p>
+                <button type="button" className="mt-4 text-blue-600 hover:text-blue-800 font-medium" onClick={resetFilters}>
+                  {t('shop.resetAll')}
                 </button>
               </div>
+            ) : viewMode === 'grid' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                {paginatedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
             ) : (
-              viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {paginatedProducts.map(product => (
-                    <div key={product.id} className="bg-white rounded-xl shadow-md overflow-hidden">
-                      <div className="relative">
-                        <img src={product.image || `/images/placeholder/300/200`} alt={product.name} className="w-full h-48 object-cover" />
-                        {product.badge && (
-                          <div className="absolute top-2 right-2">
-                            <span className={`bg-${product.badge.color}-500 text-white text-xs px-2 py-1 rounded-md`}>
-                              {product.badge.text}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <div className="text-xs text-gray-500 mb-1">
-                          {product.brand.slice(0, 3).map((brandId, index) => {
-                            const brandName = brands.find(b => b.id === brandId)?.name;
-                            return (
-                              <span key={brandId}>
-                                {brandName}
-                                {index < Math.min(product.brand.length, 3) - 1 && ", "}
-                              </span>
-                            );
-                          })}
-                          {product.brand.length > 3 && ` +${product.brand.length - 3} more`}
-                        </div>
-                        <h4 className="text-lg font-bold text-gray-900 mb-1">{product.name}</h4>
-                        <p className="text-gray-600 text-sm mb-2">{product.description}</p>
-                        <div className="flex items-center mb-3">
-                          <div className="flex text-yellow-400">
-                            {[...Array(5)].map((_, i) => (
-                              <svg 
-                                key={i} 
-                                className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-current' : ''}`} 
-                                viewBox="0 0 24 24" stroke="currentColor"
-                              >
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                              </svg>
-                            ))}
-                          </div>
-                          <span className="text-gray-500 text-sm ml-2">({product.reviews})</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            {product.oldPrice && (
-                              <span className="text-gray-400 text-sm line-through mr-1">{formatPrice(product.oldPrice)}</span>
-                            )}
-                            <span className="text-lg font-bold text-gray-900">{formatPrice(product.price)}</span>
-                          </div>
-                          <button 
-                            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md transition duration-300"
-                            onClick={() => handleAddToCart(product)}
-                            aria-label="Add to cart"
-                          >
-                            <ShoppingCart className="h-5 w-5" />
-                          </button>
-                        </div>
-                        {/* Success message */}
-                        {addedProducts[product.id] && (
-                          <div className="mt-2 bg-green-100 text-green-700 p-2 rounded text-sm flex items-center justify-center animate-pulse">
-                            <Check className="h-4 w-4 mr-1" /> Added to cart!
-                          </div>
-                        )}
-                        <div className="mt-3">
-                          <label className="flex items-center text-sm text-gray-600">
-                            <input 
-                              type="checkbox" 
-                              className="form-checkbox h-4 w-4 text-blue-600"
-                              checked={installationServices[product.id] || false}
-                              onChange={() => toggleInstallation(product.id)}
-                            />
-                            <span className="ml-2">Add installation service</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {paginatedProducts.map(product => (
-                    <div key={product.id} className="bg-white rounded-xl shadow-md overflow-hidden">
-                      <div className="flex flex-col md:flex-row">
-                        <div className="md:w-1/3 relative">
-                          <img src={product.image || `/images/placeholder/300/200`} alt={product.name} className="w-full h-48 md:h-full object-cover" />
-                          {product.badge && (
-                            <div className="absolute top-2 right-2">
-                              <span className={`bg-${product.badge.color}-500 text-white text-xs px-2 py-1 rounded-md`}>
-                                {product.badge.text}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="md:w-2/3 p-6">
-                          <div className="text-xs text-gray-500 mb-1">
-                            {product.brand.map((brandId, index) => {
-                              const brandName = brands.find(b => b.id === brandId)?.name;
-                              return (
-                                <span key={brandId}>
-                                  {brandName}
-                                  {index < product.brand.length - 1 && ", "}
-                                </span>
-                              );
-                            })}
-                          </div>
-                          <div className="flex justify-between">
-                            <h4 className="text-xl font-bold text-gray-900 mb-1">{product.name}</h4>
-                            <div className="flex text-yellow-400">
-                              {[...Array(5)].map((_, i) => (
-                                <svg 
-                                  key={i} 
-                                  className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-current' : ''}`} 
-                                  viewBox="0 0 24 24" stroke="currentColor"
-                                >
-                                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                </svg>
-                              ))}
-                              <span className="text-gray-500 text-sm ml-2">({product.reviews})</span>
-                            </div>
-                          </div>
-                          <p className="text-gray-600 mb-4">{product.description}</p>
-                          <div className="mt-auto flex justify-between items-center">
-                            <div>
-                              {product.oldPrice && (
-                                <span className="text-gray-400 text-sm line-through mr-1">{formatPrice(product.oldPrice)}</span>
-                              )}
-                              <span className="text-2xl font-bold text-gray-900">{formatPrice(product.price)}</span>
-                            </div>
-                            <div className="flex flex-col items-end space-y-2">
-                              <div className="flex items-center space-x-4">
-                                <label className="flex items-center text-sm text-gray-600">
-                                  <input 
-                                    type="checkbox" 
-                                    className="form-checkbox h-4 w-4 text-blue-600 mr-2"
-                                    checked={installationServices[product.id] || false}
-                                    onChange={() => toggleInstallation(product.id)}
-                                  />
-                                  Add installation
-                                </label>
-                                <button 
-                                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition duration-300 flex items-center"
-                                  onClick={() => handleAddToCart(product)}
-                                >
-                                  <ShoppingCart className="h-5 w-5 mr-2" /> Add to Cart
-                                </button>
-                              </div>
-                              {/* Success message for list view */}
-                              {addedProducts[product.id] && (
-                                <div className="bg-green-100 text-green-700 px-3 py-1 rounded text-sm flex items-center animate-pulse">
-                                  <Check className="h-4 w-4 mr-1" /> Added to cart!
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )
+              <div className="space-y-6">
+                {paginatedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} layout="list" />
+                ))}
+              </div>
             )}
 
-            {/* Pagination */}
-            {sortedProducts.length > 0 && (
-            <div className="flex justify-center mt-8">
-              <nav className="flex space-x-2" aria-label="Pagination">
+            {totalPages > 1 && (
+              <nav className="flex flex-wrap justify-center gap-2 mt-8" aria-label={t('shop.pagination')}>
                 <button
+                  type="button"
                   disabled={currentPage === 1}
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  onClick={() => changePage(currentPage - 1)}
                   className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
                 >
-                  Previous
+                  {t('common.previous')}
                 </button>
-
-                {[...Array(totalPages)].map((_, i) => (
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <button
-                    key={i + 1}
-                    onClick={() => setCurrentPage(i + 1)}
-                    className={`px-3 py-2 rounded-md text-sm font-medium ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-500 hover:bg-gray-50'}`}
+                    type="button"
+                    key={page}
+                    onClick={() => changePage(page)}
+                    aria-current={currentPage === page ? 'page' : undefined}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${
+                      currentPage === page ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 text-gray-500 hover:bg-gray-50'
+                    }`}
                   >
-                    {i + 1}
+                    {page}
                   </button>
                 ))}
-
                 <button
+                  type="button"
                   disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  onClick={() => changePage(currentPage + 1)}
                   className="px-3 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
                 >
-                  Next
+                  {t('common.next')}
                 </button>
               </nav>
-            </div>
             )}
           </div>
         </div>
